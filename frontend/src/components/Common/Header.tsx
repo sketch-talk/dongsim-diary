@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 const Header = () => {
-  return <S.HeaderContainer>Header</S.HeaderContainer>;
+  return <S.HeaderContainer>Sketch Talk</S.HeaderContainer>;
 };
 
 export default Header;
@@ -15,6 +15,8 @@ const S = {
     width: 100%;
     height: 60px;
 
-    background-color: #c6c6c6;
+    font-size: 20px;
+
+    border-bottom: 1px solid var(--base-color);
   `,
 };
