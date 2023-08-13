@@ -9,6 +9,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 const MainPage = () => {
   const [diaryTitle, setDiaryTitle] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
+  const [isWritten, setIsWritten] = useState<boolean>(false);
 
   const today = new Date();
   const getYear = today.getFullYear();
@@ -28,6 +29,13 @@ const MainPage = () => {
     setDiaryContents(e.currentTarget.value);
   };
 
+  const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    setIsWritten(true);
+    alert('그림 생성 준비중입니다.');
+  };
+
   return (
     <Layout>
       <S.DateWeatherContainer>
@@ -45,7 +53,17 @@ const MainPage = () => {
         </S.WeatherWrapper>
       </S.DateWeatherContainer>
 
-      <S.DrawingWrapper></S.DrawingWrapper>
+      <S.DrawingWrapper>
+        {isWritten ? (
+          <img
+            width="100px"
+            height="100px"
+            src="https://img.freepik.com/premium-vector/system-software-update-upgrade-concept-loading-process-screen-vector-illustration_175838-2182.jpg?w=2000"
+          />
+        ) : (
+          <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
+        )}
+      </S.DrawingWrapper>
 
       <S.diaryTitleContainer>
         <S.diaryTitle>제목</S.diaryTitle>
@@ -63,7 +81,9 @@ const MainPage = () => {
           placeholder="일기를 작성해주세요."
         />
       </S.WritingContainer>
-      <S.SubmitButton>오늘의 일기 완성하기</S.SubmitButton>
+      <S.SubmitButton onClick={handleSubmitButton}>
+        오늘의 그림일기 완성하기
+      </S.SubmitButton>
     </Layout>
   );
 };
@@ -126,7 +146,13 @@ const S = {
   `,
 
   DrawingWrapper: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     height: 256px;
+
+    color: var(--gray-500);
 
     border: 1px solid var(--base-color);
     border-top: none;
