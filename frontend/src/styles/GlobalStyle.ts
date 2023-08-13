@@ -2,12 +2,18 @@ import { createGlobalStyle } from 'styled-components';
 import { ResetStyle } from './ResetStyle';
 
 export const GlobalStyle = createGlobalStyle`
+@font-face {
+    font-family: 'KyoboHand';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 ${ResetStyle}
-  html,
+  html
   /* Colors *****************************************/
   :root {
-    --label-color: #333333;
+    --base-color: #333333;
     --count-color: #04c09e;
     --border-color: #dddddd;
     
@@ -23,10 +29,14 @@ ${ResetStyle}
     --white-color: #ffffff;
 }
 
-  #root {
+/*font*/
+html,textarea {
+  font-family: KyoboHand;
+}
+
+#root {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    height: 100%;
   }
 
   button{

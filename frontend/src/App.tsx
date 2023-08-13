@@ -1,17 +1,11 @@
-import styled from 'styled-components';
+import MainPage from './pages/MainPage';
 
 const App = () => {
   return (
     <>
-      <S.Title>hello world!!!!</S.Title>
+      <MainPage />
     </>
   );
 };
 
 export default App;
-
-const S = {
-  Title: styled.h1`
-    font-size: 28px;
-  `,
-};

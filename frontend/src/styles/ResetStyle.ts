@@ -134,4 +134,9 @@ export const ResetStyle = css`
     color: inherit;
     text-decoration: none;
   }
+
+  input,
+  textarea {
+    outline: none;
+  }
 `;
