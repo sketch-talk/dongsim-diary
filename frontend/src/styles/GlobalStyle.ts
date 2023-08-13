@@ -13,7 +13,7 @@ ${ResetStyle}
   html
   /* Colors *****************************************/
   :root {
-    --border-color: #333333;
+    --base-color: #333333;
     --count-color: #04c09e;
     --border-color: #dddddd;
     
