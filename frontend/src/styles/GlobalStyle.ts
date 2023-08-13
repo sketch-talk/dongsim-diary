@@ -23,10 +23,13 @@ ${ResetStyle}
     --white-color: #ffffff;
 }
 
-  #root {
+#root {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    display: flex;
-    justify-content: center;
+    height: 100%;
+    overflow: hidden;
   }
 
   button{
