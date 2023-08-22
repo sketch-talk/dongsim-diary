@@ -1,10 +1,18 @@
 import { createGlobalStyle } from 'styled-components';
 import { ResetStyle } from './ResetStyle';
+import YoonChildfundkoreaManSeh from '../assets/font/YoonChildfundkoreaManSeh.otf';
 
 export const GlobalStyle = createGlobalStyle`
 @font-face {
-    font-family: 'KyoboHand';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff') format('woff');
+    font-family: 'YoonChildfundkoreaManSeh';
+    src: url(${YoonChildfundkoreaManSeh}) format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -34,7 +42,7 @@ ${ResetStyle}
 
 /*font*/
 html,textarea {
-  font-family: KyoboHand;
+  font-family: pretendard;
 }
 
 #root {
