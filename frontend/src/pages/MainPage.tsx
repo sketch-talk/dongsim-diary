@@ -5,10 +5,14 @@ import { ReactComponent as SunIcon } from '../assets/sun-icon.svg';
 import { ReactComponent as RainyIcon } from '../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../assets/snowman-icon.svg';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAi } from '../hooks/useAi';
 
 const MainPage = () => {
   const [diaryTitle, setDiaryTitle] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
+  const [isWritten, setIsWritten] = useState<boolean>(false);
+
+  const { data, createImage } = useAi();
 
   const today = new Date();
   const getYear = today.getFullYear();
@@ -28,6 +32,20 @@ const MainPage = () => {
     setDiaryContents(e.currentTarget.value);
   };
 
+  const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    setIsWritten(true);
+
+    const textPrompt = diaryContents;
+
+    if (textPrompt !== null && typeof textPrompt === 'string') {
+      createImage(textPrompt);
+    }
+
+    alert('그림을 생성하겠습니다.');
+  };
+
   return (
     <Layout>
       <S.DateWeatherContainer>
@@ -45,7 +63,13 @@ const MainPage = () => {
         </S.WeatherWrapper>
       </S.DateWeatherContainer>
 
-      <S.DrawingWrapper></S.DrawingWrapper>
+      <S.DrawingWrapper>
+        {isWritten ? (
+          <img width="256px" height="256px" src={data} />
+        ) : (
+          <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
+        )}
+      </S.DrawingWrapper>
 
       <S.diaryTitleContainer>
         <S.diaryTitle>제목</S.diaryTitle>
@@ -63,7 +87,9 @@ const MainPage = () => {
           placeholder="일기를 작성해주세요."
         />
       </S.WritingContainer>
-      <S.SubmitButton>오늘의 일기 완성하기</S.SubmitButton>
+      <S.SubmitButton onClick={handleSubmitButton}>
+        오늘의 그림일기 완성하기
+      </S.SubmitButton>
     </Layout>
   );
 };
@@ -126,7 +152,13 @@ const S = {
   `,
 
   DrawingWrapper: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     height: 256px;
+
+    color: var(--gray-500);
 
     border: 1px solid var(--base-color);
     border-top: none;
