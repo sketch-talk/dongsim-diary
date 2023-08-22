@@ -6,8 +6,6 @@ export const GlobalStyle = createGlobalStyle`
 @font-face {
     font-family: 'YoonChildfundkoreaManSeh';
     src: url(${YoonChildfundkoreaManSeh}) format('otf');
-    font-weight: normal;
-    font-style: normal;
 }
 
 @font-face {

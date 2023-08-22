@@ -42,6 +42,18 @@ const MainPage = () => {
   const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    if (!weather) {
+      return alert('날씨를 선택해주세요 ☀️');
+    }
+
+    if (!diaryTitle) {
+      return alert('제목을 작성해주세요 🥺');
+    }
+
+    if (!diaryContents) {
+      return alert('일기 내용을 작성해주세요 🥺');
+    }
+
     const char = diaryContents.split('');
 
     setDiaryCharacters(char);
@@ -59,7 +71,6 @@ const MainPage = () => {
     }
   };
 
-  console.log(weather);
   // const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
   //   e.preventDefault();
 
@@ -105,7 +116,11 @@ const MainPage = () => {
 
       <S.DrawingWrapper>
         {isWritten ? (
-          <img width="256px" height="256px" src={data} />
+          <img
+            width="256px"
+            height="256px"
+            src="https://www.gisulin.kr/PEG/15933328886594.jpg"
+          />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
@@ -113,7 +128,17 @@ const MainPage = () => {
 
       <S.DiaryContentContainer>
         {isWritten ? (
-          <></>
+          <>
+            <S.diaryTitleContainer>
+              <S.diaryTitle>제목</S.diaryTitle>
+              <S.diaryTitleWritten>{diaryTitle}</S.diaryTitleWritten>
+            </S.diaryTitleContainer>
+            <S.CharacterInputContainer>
+              {diaryCharacters.map((item, index) => {
+                return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
+              })}
+            </S.CharacterInputContainer>
+          </>
         ) : (
           <DiaryContents
             diaryTitle={diaryTitle}
@@ -124,12 +149,6 @@ const MainPage = () => {
           />
         )}
       </S.DiaryContentContainer>
-
-      <S.CharacterInputContainer>
-        {diaryCharacters.map((item, index) => {
-          return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
-        })}
-      </S.CharacterInputContainer>
     </Layout>
   );
 };
@@ -163,6 +182,7 @@ const S = {
   `,
 
   HighlightedText: styled.span`
+    font-weight: 900;
     font-family: 'YoonChildfundkoreaManSeh';
     font-size: 24px;
   `,
@@ -219,30 +239,76 @@ const S = {
 
     border: 1px solid var(--base-color);
     border-top: none;
+
+    & img {
+      padding: 30px;
+    }
   `,
 
   DiaryContentContainer: styled.div``,
 
+  diaryTitleContainer: styled.div`
+    display: flex;
+    align-items: center;
+    height: 60px;
+
+    font-size: 24px;
+
+    border: 1px solid var(--base-color);
+    border-top: none;
+  `,
+
+  diaryTitle: styled.p`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 20%;
+    padding-left: 20px;
+
+    &::after {
+      content: '';
+      height: 60px;
+      border-right: 1px solid var(--base-color);
+      margin-left: auto;
+      width: 0;
+    }
+  `,
+
+  diaryTitleWritten: styled.div`
+    width: 70%;
+    padding-left: 20px;
+
+    font-family: YoonChildfundkoreaManSeh;
+    letter-spacing: 5px;
+  `,
+
   CharacterInputContainer: styled.div`
     display: grid;
     justify-content: center;
-    grid-template-columns: repeat(10, 35px);
+    grid-template-columns: repeat(10, 1fr);
     gap: 0;
-
     width: 100%;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(10, 1fr);
+    }
   `,
 
   CharacterInput: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 60px;
+    height: 60px;
 
-    width: 35px;
-    height: 35px;
-
-    font-size: 24px;
+    font-size: 28px;
     font-family: YoonChildfundkoreaManSeh;
 
     border: 1px solid #333333;
+
+    @media (max-width: 760px) {
+      height: 37.5px;
+    }
   `,
 };
