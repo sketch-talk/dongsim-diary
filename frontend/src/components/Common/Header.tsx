@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 const Header = () => {
-  return <S.HeaderContainer>Sketch Talk</S.HeaderContainer>;
+  return <S.HeaderContainer>동심 일기</S.HeaderContainer>;
 };
 
 export default Header;
@@ -13,10 +13,10 @@ const S = {
     justify-content: center;
 
     width: 100%;
-    height: 60px;
+    height: 80px;
 
-    font-size: 20px;
-
-    border-bottom: 1px solid var(--base-color);
+    font-size: 38px;
+    font-weight: 700;
+    font-family: YoonChildfundkoreaManSeh;
   `,
 };

@@ -4,32 +4,78 @@ import { ReactComponent as CloudIcon } from '../assets/cloud-icon.svg';
 import { ReactComponent as SunIcon } from '../assets/sun-icon.svg';
 import { ReactComponent as RainyIcon } from '../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../assets/snowman-icon.svg';
+import { ReactComponent as Circle } from '../assets/circle.svg';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAi } from '../hooks/useAi';
+import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
+import DiaryContents from '../components/DiaryContents/DiaryContents';
 
 const MainPage = () => {
   const [diaryTitle, setDiaryTitle] = useState<string>('');
+  const [weather, setWeather] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
+  const [diaryCharacters, setDiaryCharacters] = useState<string[]>([]);
+
   const [isWritten, setIsWritten] = useState<boolean>(false);
 
   const { data, createImage } = useAi();
 
-  const today = new Date();
-  const getYear = today.getFullYear();
-  const getMonth = today.getMonth() + 1;
-  const getDate = today.getDate();
-  const getDay = today.getDay();
-  const day = ['일', '월', '화', '수', '목', '금', '토'];
+  const weatherIcons = [
+    { Component: SunIcon, type: 'sunny' },
+    { Component: CloudIcon, type: 'cloudy' },
+    { Component: RainyIcon, type: 'rainy' },
+    { Component: SnowmanIcon, type: 'snowy' },
+  ];
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setDiaryTitle(e.target.value);
+    const inputValue = e.target.value;
+    if (inputValue.length >= 16) return;
+
+    setDiaryTitle(inputValue);
   };
 
   const handleResizeHeight = (e: FormEvent<HTMLTextAreaElement>) => {
     e.currentTarget.style.height = 'auto';
     e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
 
-    setDiaryContents(e.currentTarget.value);
+    const inputValue = e.currentTarget.value;
+
+    if (inputValue.length > 100) return;
+
+    setDiaryContents(inputValue);
+  };
+
+  const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!weather) {
+      return alert('날씨를 선택해주세요 ☀️');
+    }
+
+    if (!diaryTitle) {
+      return alert('제목을 작성해주세요 🥺');
+    }
+
+    if (!diaryContents) {
+      return alert('일기 내용을 작성해주세요 🥺');
+    }
+
+    const char = diaryContents.split('');
+
+    setDiaryCharacters(char);
+    setIsWritten(true);
+  };
+
+  const handleClickWeather = (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    if (isWritten) return;
+
+    const weatherType = e.currentTarget.getAttribute('data-weather');
+
+    if (weatherType) {
+      setWeather(weatherType);
+    }
   };
 
   const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
@@ -50,15 +96,27 @@ const MainPage = () => {
     <Layout>
       <S.DateWeatherContainer>
         <S.DateWrapper>
-          <S.Date>{`${getYear}년 ${getMonth}월 ${getDate}일 ${day[getDay]}요일`}</S.Date>
+          <S.Date>
+            <S.HighlightedText>{getYear}</S.HighlightedText>년
+            <S.HighlightedText>{getMonth}</S.HighlightedText>월
+            <S.HighlightedText>{getDate}</S.HighlightedText>일
+            <S.HighlightedText>{day[getDay]}</S.HighlightedText>요일
+          </S.Date>
         </S.DateWrapper>
         <S.WeatherWrapper>
           <S.Weather>
-            <S.WeatherTitle>날씨</S.WeatherTitle>
-            <SunIcon />
-            <CloudIcon />
-            <RainyIcon />
-            <SnowmanIcon />
+            <S.WeatherTitle>날씨: </S.WeatherTitle>
+            {weatherIcons.map(({ Component, type }) => (
+              <S.WeatherIconContainer key={type}>
+                {weather === type && <S.StyledCircle />}
+                <Component
+                  onClick={handleClickWeather}
+                  data-weather={type}
+                  width={25}
+                  height={25}
+                />
+              </S.WeatherIconContainer>
+            ))}
           </S.Weather>
         </S.WeatherWrapper>
       </S.DateWeatherContainer>
@@ -71,25 +129,30 @@ const MainPage = () => {
         )}
       </S.DrawingWrapper>
 
-      <S.diaryTitleContainer>
-        <S.diaryTitle>제목</S.diaryTitle>
-        <S.diaryTitleInput
-          value={diaryTitle}
-          onChange={handleChangeTitleInput}
-          placeholder="일기 제목을 입력해주세요."
-        />
-      </S.diaryTitleContainer>
-      <S.WritingContainer>
-        <S.WritingArea
-          value={diaryContents}
-          onChange={handleResizeHeight}
-          rows={1}
-          placeholder="일기를 작성해주세요."
-        />
-      </S.WritingContainer>
-      <S.SubmitButton onClick={handleSubmitButton}>
-        오늘의 그림일기 완성하기
-      </S.SubmitButton>
+      <S.DiaryContentContainer>
+        {isWritten ? (
+          <>
+            <S.diaryTitleContainer>
+              <S.diaryTitle>제목</S.diaryTitle>
+              <S.diaryTitleWritten>{diaryTitle}</S.diaryTitleWritten>
+            </S.diaryTitleContainer>
+            <S.CharacterInputContainer>
+              {diaryCharacters.map((item, index) => {
+                return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
+              })}
+            </S.CharacterInputContainer>
+          </>
+        ) : (
+          <DiaryContents
+            diaryTitle={diaryTitle}
+            diaryContents={diaryContents}
+            handleChangeTitleInput={handleChangeTitleInput}
+            handleResizeHeight={handleResizeHeight}
+            handleSubmitDiary={handleSubmitDiary}
+            handleSubmitButton={handleSubmitButton}
+          />
+        )}
+      </S.DiaryContentContainer>
     </Layout>
   );
 };
@@ -99,56 +162,74 @@ export default MainPage;
 const S = {
   DateWeatherContainer: styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
 
-    height: 45px;
-
-    border: 1px solid var(--base-color);
     border-top: none;
   `,
 
   DateWrapper: styled.div`
     display: flex;
     justify-content: center;
-    align-items: center; // 세로 중앙 정렬 추가
-    width: 50%;
-    height: 100%; // 부모 요소의 높이에 맞춤
+    align-items: center;
+    flex: 1;
 
-    &::after {
-      content: ''; // 내용을 비워둠
-      height: 45px; // 높이 지정
-      border-right: 1px solid var(--base-color); // 오른쪽 테두리 지정
-      margin-left: auto; // 왼쪽 마진을 자동으로 지정하여 오른쪽 끝에 위치
-      width: 0; // 너비는 0으로 설정
-    }
+    border: 1px solid var(--base-color);
   `,
 
   Date: styled.p`
-    padding-left: 20px;
-  `,
-
-  WeatherWrapper: styled.div`
-    display: flex;
-    justify-content: flex-start;
-
-    width: 50%;
-  `,
-
-  Weather: styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
 
-    padding-left: 20px;
+    height: 45px;
+    padding-left: 15px;
+  `,
 
-    & svg {
-      cursor: pointer;
-    }
+  HighlightedText: styled.span`
+    font-weight: 900;
+    font-family: 'YoonChildfundkoreaManSeh';
+    font-size: 24px;
+  `,
+
+  WeatherWrapper: styled.div`
+    display: flex;
+  `,
+
+  Weather: styled.div`
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    height: 65px;
+
+    border: 1px solid var(--base-color);
+    border-top: none;
+    border-bottom: none;
   `,
 
   WeatherTitle: styled.p`
     margin-right: 10px;
+  `,
+
+  WeatherIconContainer: styled.div`
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    cursor: pointer;
+  `,
+
+  StyledCircle: styled(Circle)`
+    width: 45px;
+    height: 45px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
   `,
 
   DrawingWrapper: styled.div`
@@ -162,7 +243,13 @@ const S = {
 
     border: 1px solid var(--base-color);
     border-top: none;
+
+    & img {
+      padding: 30px;
+    }
   `,
+
+  DiaryContentContainer: styled.div``,
 
   diaryTitleContainer: styled.div`
     display: flex;
@@ -192,45 +279,40 @@ const S = {
     }
   `,
 
-  diaryTitleInput: styled.input`
+  diaryTitleWritten: styled.div`
     width: 70%;
     padding-left: 20px;
 
-    &:focus {
-      outline: none;
+    font-family: YoonChildfundkoreaManSeh;
+    letter-spacing: 5px;
+  `,
+
+  CharacterInputContainer: styled.div`
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(10, 1fr);
     }
   `,
 
-  WritingContainer: styled.div`
+  CharacterInput: styled.div`
     display: flex;
     justify-content: center;
-  `,
+    align-items: center;
+    height: 60px;
+    height: 60px;
 
-  WritingArea: styled.textarea`
-    width: 100%;
-    min-height: 200px;
-    padding: 20px;
+    font-size: 28px;
+    font-family: YoonChildfundkoreaManSeh;
 
-    line-height: 1.5em;
+    border: 1px solid #333333;
 
-    font-size: 24px;
-
-    border: 1px solid var(--base-color);
-    border-top: none;
-  `,
-
-  SubmitButton: styled.button`
-    display: block;
-
-    width: 80%;
-    height: 50px;
-
-    margin: 20px auto;
-
-    font-size: 20px;
-    color: var(--white-color);
-
-    border-radius: 8px;
-    background-color: var(--base-color);
+    @media (max-width: 760px) {
+      height: 37.5px;
+    }
   `,
 };
