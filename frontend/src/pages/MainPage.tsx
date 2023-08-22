@@ -5,11 +5,14 @@ import { ReactComponent as SunIcon } from '../assets/sun-icon.svg';
 import { ReactComponent as RainyIcon } from '../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../assets/snowman-icon.svg';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAi } from '../hooks/useAi';
 
 const MainPage = () => {
   const [diaryTitle, setDiaryTitle] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
   const [isWritten, setIsWritten] = useState<boolean>(false);
+
+  const { data, createImage } = useAi();
 
   const today = new Date();
   const getYear = today.getFullYear();
@@ -33,7 +36,14 @@ const MainPage = () => {
     e.preventDefault();
 
     setIsWritten(true);
-    alert('그림 생성 준비중입니다.');
+
+    const textPrompt = diaryContents;
+
+    if (textPrompt !== null && typeof textPrompt === 'string') {
+      createImage(textPrompt);
+    }
+
+    alert('그림을 생성하겠습니다.');
   };
 
   return (
@@ -55,11 +65,7 @@ const MainPage = () => {
 
       <S.DrawingWrapper>
         {isWritten ? (
-          <img
-            width="100px"
-            height="100px"
-            src="https://img.freepik.com/premium-vector/system-software-update-upgrade-concept-loading-process-screen-vector-illustration_175838-2182.jpg?w=2000"
-          />
+          <img width="256px" height="256px" src={data} />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}

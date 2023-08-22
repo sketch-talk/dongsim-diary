@@ -18,14 +18,17 @@ ${ResetStyle}
     --border-color: #dddddd;
     
     --black: #000000;
-    --gray-800: #282828;
-    --gray-700: #5e5e5e;
-    --gray-500: #a6a6a6;
-    --gray-600: #727272;
-    --gray-300: #dddddd;
-    --gray-400: #bbbbbb;
-    --gray-100: #f3f3f3;
-    --gray-200: #e8e8e8;
+    --gray-50: #f7f7f8;
+    --gray-100: #ececf1;
+    --gray-200: #d9d9e3;
+    --gray-300: #c5c5d2;
+    --gray-400: #acacbe;
+    --gray-500: #8e8ea0;
+    --gray-600: #565869;
+    --gray-700: #40414f;
+    --gray-800: #343541;
+    --gray-900: #202123;
+    --gray-950: #050509;
     --white-color: #ffffff;
 }
 
