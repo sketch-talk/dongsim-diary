@@ -7,6 +7,7 @@ interface Props {
   handleChangeTitleInput: (e: ChangeEvent<HTMLInputElement>) => void;
   handleResizeHeight: (e: FormEvent<HTMLTextAreaElement>) => void;
   handleSubmitDiary: (e: FormEvent<HTMLButtonElement>) => void;
+  handleSubmitButton: (e: FormEvent<HTMLButtonElement>) => void;
 }
 
 const DiaryContents = ({
@@ -15,17 +16,27 @@ const DiaryContents = ({
   handleChangeTitleInput,
   handleResizeHeight,
   handleSubmitDiary,
+  handleSubmitButton,
 }: Props) => {
   return (
     <>
       <S.diaryTitleContainer>
         <S.diaryTitle>제목</S.diaryTitle>
-        <S.diaryTitleInput
-          value={diaryTitle}
-          onChange={handleChangeTitleInput}
-          placeholder="일기 제목을 입력해주세요."
-        />
+        <S.TitleInputContainer>
+          <S.InputContainer>
+            <S.diaryTitleInput
+              value={diaryTitle}
+              onChange={handleChangeTitleInput}
+              placeholder="일기 제목을 입력해주세요."
+            />
+            <S.TitleLength>{diaryTitle.length}/15</S.TitleLength>
+          </S.InputContainer>
+          {diaryTitle.length >= 15 && (
+            <S.Caption>제목은 15자 이하로 입력해주세요.</S.Caption>
+          )}
+        </S.TitleInputContainer>
       </S.diaryTitleContainer>
+
       <S.WritingContainer>
         <S.WritingArea
           value={diaryContents}
@@ -33,13 +44,17 @@ const DiaryContents = ({
           rows={1}
           placeholder="일기를 작성해주세요."
         />
+        <S.CaptionContainer>
+          {diaryContents.length >= 100 && (
+            <S.Caption>일기 내용은 100자 이내로 작성해주세요.</S.Caption>
+          )}
+          <S.TitleLength>{diaryContents.length}/100</S.TitleLength>
+        </S.CaptionContainer>
       </S.WritingContainer>
-      {/* <S.SubmitButton onClick={handleSubmitButton}>
-  오늘의 그림일기 완성하기
-</S.SubmitButton> */}
       <S.SubmitButton onClick={handleSubmitDiary}>
         일기 형식으로 저장
       </S.SubmitButton>
+      <S.SubmitButton onClick={handleSubmitButton}>그림 생성</S.SubmitButton>
     </>
   );
 };
@@ -75,22 +90,57 @@ const S = {
     }
   `,
 
+  TitleInputContainer: styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+    padding: 0 20px;
+  `,
+
+  InputContainer: styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `,
+
   diaryTitleInput: styled.input`
-    width: 70%;
-    padding-left: 20px;
+    width: 80%;
 
     &:focus {
       outline: none;
     }
+
+    @media (max-width: 768px) {
+      font-size: 18px;
+    }
+  `,
+  TitleLength: styled.p`
+    font-size: 10px;
+    color: var(--gray-400);
+  `,
+
+  Caption: styled.span`
+    font-size: 10px;
+    color: red;
   `,
 
   WritingContainer: styled.div`
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+  `,
+
+  CaptionContainer: styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    width: 100%;
+
+    margin: 5px 10px 0 0;
   `,
 
   WritingArea: styled.textarea`
-    width: 100%;
     min-height: 200px;
     padding: 20px;
 
@@ -100,6 +150,10 @@ const S = {
 
     border: 1px solid var(--base-color);
     border-top: none;
+
+    @media (max-width: 768px) {
+      font-size: 18px;
+    }
   `,
 
   SubmitButton: styled.button`

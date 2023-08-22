@@ -6,7 +6,7 @@ import { ReactComponent as RainyIcon } from '../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../assets/snowman-icon.svg';
 import { ReactComponent as Circle } from '../assets/circle.svg';
 import { ChangeEvent, FormEvent, useState } from 'react';
-// import { useAi } from '../hooks/useAi';
+import { useAi } from '../hooks/useAi';
 import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 
@@ -18,7 +18,7 @@ const MainPage = () => {
 
   const [isWritten, setIsWritten] = useState<boolean>(false);
 
-  // const { data, createImage } = useAi();
+  const { data, createImage } = useAi();
 
   const weatherIcons = [
     { Component: SunIcon, type: 'sunny' },
@@ -29,6 +29,8 @@ const MainPage = () => {
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
+    if (inputValue.length >= 16) return;
+
     setDiaryTitle(inputValue);
   };
 
@@ -36,7 +38,11 @@ const MainPage = () => {
     e.currentTarget.style.height = 'auto';
     e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
 
-    setDiaryContents(e.currentTarget.value);
+    const inputValue = e.currentTarget.value;
+
+    if (inputValue.length > 100) return;
+
+    setDiaryContents(inputValue);
   };
 
   const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
@@ -66,24 +72,25 @@ const MainPage = () => {
     if (isWritten) return;
 
     const weatherType = e.currentTarget.getAttribute('data-weather');
+
     if (weatherType) {
       setWeather(weatherType);
     }
   };
 
-  // const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
+  const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
 
-  //   setIsWritten(true);
+    setIsWritten(true);
 
-  //   const textPrompt = diaryContents;
+    const textPrompt = diaryContents;
 
-  //   if (textPrompt !== null && typeof textPrompt === 'string') {
-  //     createImage(textPrompt);
-  //   }
+    if (textPrompt !== null && typeof textPrompt === 'string') {
+      createImage(textPrompt);
+    }
 
-  //   alert('그림을 생성하겠습니다.');
-  // };
+    alert('그림을 생성하겠습니다.');
+  };
 
   return (
     <Layout>
@@ -116,11 +123,7 @@ const MainPage = () => {
 
       <S.DrawingWrapper>
         {isWritten ? (
-          <img
-            width="256px"
-            height="256px"
-            src="https://www.gisulin.kr/PEG/15933328886594.jpg"
-          />
+          <img width="256px" height="256px" src={data} />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
@@ -146,6 +149,7 @@ const MainPage = () => {
             handleChangeTitleInput={handleChangeTitleInput}
             handleResizeHeight={handleResizeHeight}
             handleSubmitDiary={handleSubmitDiary}
+            handleSubmitButton={handleSubmitButton}
           />
         )}
       </S.DiaryContentContainer>
