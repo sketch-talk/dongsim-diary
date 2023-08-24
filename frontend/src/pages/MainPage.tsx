@@ -7,6 +7,8 @@ import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
 import Loading from '../components/Loading/Loading';
 import { capture } from '../utils/capture';
+import Share from '../components/Share/Share';
+import mockImage from '../mocks/mockImage.jpeg';
 
 const MainPage = () => {
   const captureRef = useRef<HTMLDivElement | null>(null);
@@ -98,7 +100,7 @@ const MainPage = () => {
     getImageUrl();
   };
 
-  const handle = () => {
+  const handleCapture = () => {
     capture(captureRef);
   };
 
@@ -131,7 +133,7 @@ const MainPage = () => {
             <p> 잠시만 기다려주세요.</p>
           </Loading>
         ) : isWritten ? (
-          <img width="256px" height="256px" alt="그림" src={imageUrl} />
+          <img width="256px" height="256px" alt="그림" src={mockImage} />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
@@ -160,7 +162,11 @@ const MainPage = () => {
           />
         )}
       </S.DiaryContentContainer>
-      <button onClick={handle}>화면 캡쳐하기</button>
+      {isWritten ? (
+        <S.ShareContainer>
+          <Share handleCapture={handleCapture} />
+        </S.ShareContainer>
+      ) : null}
     </Layout>
   );
 };
@@ -304,4 +310,6 @@ const S = {
       height: 37.5px;
     }
   `,
+
+  ShareContainer: styled.div``,
 };
