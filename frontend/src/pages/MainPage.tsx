@@ -1,13 +1,16 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
 import Loading from '../components/Loading/Loading';
+import { capture } from '../utils/capture';
 
 const MainPage = () => {
+  const captureRef = useRef<HTMLDivElement | null>(null);
+
   const [diaryTitle, setDiaryTitle] = useState<string>('');
   const [weather, setWeather] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
@@ -95,8 +98,12 @@ const MainPage = () => {
     getImageUrl();
   };
 
+  const handle = () => {
+    capture(captureRef);
+  };
+
   return (
-    <Layout>
+    <Layout ref={captureRef}>
       <S.DateWeatherContainer>
         <S.DateWrapper>
           <S.Date>
@@ -153,6 +160,7 @@ const MainPage = () => {
           />
         )}
       </S.DiaryContentContainer>
+      <button onClick={handle}>화면 캡쳐하기</button>
     </Layout>
   );
 };
