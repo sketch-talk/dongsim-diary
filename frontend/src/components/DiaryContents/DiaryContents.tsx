@@ -7,7 +7,6 @@ interface Props {
   handleChangeTitleInput: (e: ChangeEvent<HTMLInputElement>) => void;
   handleResizeHeight: (e: FormEvent<HTMLTextAreaElement>) => void;
   handleSubmitDiary: (e: FormEvent<HTMLButtonElement>) => void;
-  handleSubmitButton: (e: FormEvent<HTMLButtonElement>) => void;
 }
 
 const DiaryContents = ({
@@ -16,7 +15,6 @@ const DiaryContents = ({
   handleChangeTitleInput,
   handleResizeHeight,
   handleSubmitDiary,
-  handleSubmitButton,
 }: Props) => {
   return (
     <>
@@ -54,7 +52,6 @@ const DiaryContents = ({
       <S.SubmitButton onClick={handleSubmitDiary}>
         일기 형식으로 저장
       </S.SubmitButton>
-      <S.SubmitButton onClick={handleSubmitButton}>그림 생성</S.SubmitButton>
     </>
   );
 };

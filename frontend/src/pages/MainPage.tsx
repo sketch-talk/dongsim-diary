@@ -1,31 +1,18 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ReactComponent as CloudIcon } from '../assets/cloud-icon.svg';
-import { ReactComponent as SunIcon } from '../assets/sun-icon.svg';
-import { ReactComponent as RainyIcon } from '../assets/rainy-icon.svg';
-import { ReactComponent as SnowmanIcon } from '../assets/snowman-icon.svg';
-import { ReactComponent as Circle } from '../assets/circle.svg';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useAi } from '../hooks/useAi';
 import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
+import Weathers from '../components/Weathers/Weathers';
+import axios from 'axios';
 
 const MainPage = () => {
   const [diaryTitle, setDiaryTitle] = useState<string>('');
   const [weather, setWeather] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
   const [diaryCharacters, setDiaryCharacters] = useState<string[]>([]);
-
+  const [imageUrl, setImageUrl] = useState<string>('');
   const [isWritten, setIsWritten] = useState<boolean>(false);
-
-  const { data, createImage } = useAi();
-
-  const weatherIcons = [
-    { Component: SunIcon, type: 'sunny' },
-    { Component: CloudIcon, type: 'cloudy' },
-    { Component: RainyIcon, type: 'rainy' },
-    { Component: SnowmanIcon, type: 'snowy' },
-  ];
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -43,6 +30,35 @@ const MainPage = () => {
     if (inputValue.length > 100) return;
 
     setDiaryContents(inputValue);
+  };
+
+  const handleClickWeather = (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    if (isWritten) return;
+
+    const weatherType = e.currentTarget.getAttribute('data-weather');
+
+    if (weatherType) {
+      setWeather(weatherType);
+    }
+  };
+
+  const postData = async () => {
+    try {
+      await axios.post('/post/contents', diaryContents);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getImageUrl = async () => {
+    try {
+      const { data } = await axios.get('/post/imageUrl');
+      setImageUrl(data.imageUrl);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
@@ -64,32 +80,10 @@ const MainPage = () => {
 
     setDiaryCharacters(char);
     setIsWritten(true);
-  };
-
-  const handleClickWeather = (
-    e: React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
-    if (isWritten) return;
-
-    const weatherType = e.currentTarget.getAttribute('data-weather');
-
-    if (weatherType) {
-      setWeather(weatherType);
-    }
-  };
-
-  const handleSubmitButton = (e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    setIsWritten(true);
-
-    const textPrompt = diaryContents;
-
-    if (textPrompt !== null && typeof textPrompt === 'string') {
-      createImage(textPrompt);
-    }
-
+    postData();
     alert('그림을 생성하겠습니다.');
+
+    getImageUrl();
   };
 
   return (
@@ -106,24 +100,17 @@ const MainPage = () => {
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>
-            {weatherIcons.map(({ Component, type }) => (
-              <S.WeatherIconContainer key={type}>
-                {weather === type && <S.StyledCircle />}
-                <Component
-                  onClick={handleClickWeather}
-                  data-weather={type}
-                  width={25}
-                  height={25}
-                />
-              </S.WeatherIconContainer>
-            ))}
+            <Weathers
+              weather={weather}
+              handleClickWeather={handleClickWeather}
+            />
           </S.Weather>
         </S.WeatherWrapper>
       </S.DateWeatherContainer>
 
       <S.DrawingWrapper>
         {isWritten ? (
-          <img width="256px" height="256px" src={data} />
+          <img width="256px" height="256px" src={imageUrl} />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
@@ -149,7 +136,6 @@ const MainPage = () => {
             handleChangeTitleInput={handleChangeTitleInput}
             handleResizeHeight={handleResizeHeight}
             handleSubmitDiary={handleSubmitDiary}
-            handleSubmitButton={handleSubmitButton}
           />
         )}
       </S.DiaryContentContainer>
@@ -211,25 +197,6 @@ const S = {
 
   WeatherTitle: styled.p`
     margin-right: 10px;
-  `,
-
-  WeatherIconContainer: styled.div`
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    cursor: pointer;
-  `,
-
-  StyledCircle: styled(Circle)`
-    width: 45px;
-    height: 45px;
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
   `,
 
   DrawingWrapper: styled.div`
