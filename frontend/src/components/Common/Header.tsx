@@ -1,7 +1,11 @@
 import { styled } from 'styled-components';
 
 const Header = () => {
-  return <S.HeaderContainer>동심 일기</S.HeaderContainer>;
+  return (
+    <S.HeaderContainer>
+      <a href="/">동심 일기</a>
+    </S.HeaderContainer>
+  );
 };
 
 export default Header;
