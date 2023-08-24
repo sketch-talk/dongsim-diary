@@ -5,6 +5,7 @@ import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
+import Loading from '../components/Loading/Loading';
 
 const MainPage = () => {
   const [diaryTitle, setDiaryTitle] = useState<string>('');
@@ -13,6 +14,7 @@ const MainPage = () => {
   const [diaryCharacters, setDiaryCharacters] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isWritten, setIsWritten] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -46,7 +48,11 @@ const MainPage = () => {
 
   const postData = async () => {
     try {
-      await axios.post('/post/contents', diaryContents);
+      await axios.post('/post/contents', {
+        title: diaryTitle,
+        weather: weather,
+        contents: diaryContents,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -54,10 +60,13 @@ const MainPage = () => {
 
   const getImageUrl = async () => {
     try {
+      setIsLoading(true);
       const { data } = await axios.get('/post/imageUrl');
       setImageUrl(data.imageUrl);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,8 +118,13 @@ const MainPage = () => {
       </S.DateWeatherContainer>
 
       <S.DrawingWrapper>
-        {isWritten ? (
-          <img width="256px" height="256px" src={imageUrl} />
+        {isLoading ? (
+          <Loading>
+            <p>이미지를 생성 중입니다.</p>
+            <p> 잠시만 기다려주세요.</p>
+          </Loading>
+        ) : isWritten ? (
+          <img width="256px" height="256px" alt="그림" src={imageUrl} />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
