@@ -3,7 +3,6 @@ import imageUrl from './imageUrl.json';
 
 export const handlers = [
   rest.post('*/post/contents', (req, res, ctx) => {
-    console.log(req.body);
     return res(ctx.delay(1000), ctx.status(201));
   }),
 
