@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ForwardRefRenderFunction, forwardRef } from 'react';
 import Header from '../Common/Header';
 import { styled } from 'styled-components';
 
@@ -6,16 +6,19 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout: ForwardRefRenderFunction<HTMLDivElement, Props> = (
+  { children },
+  ref
+) => {
   return (
     <S.LayoutContainer>
       <Header />
-      <S.MainWrapper>{children}</S.MainWrapper>
+      <S.MainWrapper ref={ref}>{children}</S.MainWrapper>
     </S.LayoutContainer>
   );
 };
 
-export default Layout;
+export default forwardRef(Layout);
 
 const S = {
   LayoutContainer: styled.div`

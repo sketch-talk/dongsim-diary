@@ -1,13 +1,17 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
 import Loading from '../components/Loading/Loading';
+import { capture } from '../utils/capture';
+import Share from '../components/Share/Share';
 
 const MainPage = () => {
+  const captureRef = useRef<HTMLDivElement | null>(null);
+
   const [diaryTitle, setDiaryTitle] = useState<string>('');
   const [weather, setWeather] = useState<string>('');
   const [diaryContents, setDiaryContents] = useState<string>('');
@@ -95,8 +99,16 @@ const MainPage = () => {
     getImageUrl();
   };
 
+  const handleCapture = () => {
+    capture(captureRef);
+  };
+
+  const handleShare = () => {
+    alert('준비 중인 기능입니다.');
+  };
+
   return (
-    <Layout>
+    <Layout ref={captureRef}>
       <S.DateWeatherContainer>
         <S.DateWrapper>
           <S.Date>
@@ -153,6 +165,9 @@ const MainPage = () => {
           />
         )}
       </S.DiaryContentContainer>
+      {isWritten ? (
+        <Share handleShare={handleShare} handleCapture={handleCapture} />
+      ) : null}
     </Layout>
   );
 };
@@ -237,7 +252,7 @@ const S = {
     align-items: center;
     height: 60px;
 
-    font-size: 24px;
+    font-size: 1.8rem;
 
     border: 1px solid var(--base-color);
     border-top: none;
@@ -296,4 +311,6 @@ const S = {
       height: 37.5px;
     }
   `,
+
+  ShareContainer: styled.div``,
 };
