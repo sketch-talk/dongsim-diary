@@ -8,7 +8,6 @@ import axios from 'axios';
 import Loading from '../components/Loading/Loading';
 import { capture } from '../utils/capture';
 import Share from '../components/Share/Share';
-import mockImage from '../mocks/mockImage.jpeg';
 
 const MainPage = () => {
   const captureRef = useRef<HTMLDivElement | null>(null);
@@ -104,6 +103,10 @@ const MainPage = () => {
     capture(captureRef);
   };
 
+  const handleShare = () => {
+    alert('준비 중인 기능입니다.');
+  };
+
   return (
     <Layout ref={captureRef}>
       <S.DateWeatherContainer>
@@ -133,7 +136,7 @@ const MainPage = () => {
             <p> 잠시만 기다려주세요.</p>
           </Loading>
         ) : isWritten ? (
-          <img width="256px" height="256px" alt="그림" src={mockImage} />
+          <img width="256px" height="256px" alt="그림" src={imageUrl} />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
@@ -163,9 +166,7 @@ const MainPage = () => {
         )}
       </S.DiaryContentContainer>
       {isWritten ? (
-        <S.ShareContainer>
-          <Share handleCapture={handleCapture} />
-        </S.ShareContainer>
+        <Share handleShare={handleShare} handleCapture={handleCapture} />
       ) : null}
     </Layout>
   );
@@ -251,7 +252,7 @@ const S = {
     align-items: center;
     height: 60px;
 
-    font-size: 24px;
+    font-size: 1.8rem;
 
     border: 1px solid var(--base-color);
     border-top: none;
