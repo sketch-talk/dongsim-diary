@@ -5,12 +5,12 @@ import YoonChildfundkoreaManSeh from '/assets/font/YoonChildfundkoreaManSeh.otf'
 export const GlobalStyle = createGlobalStyle`
 @font-face {
     font-family: 'YoonChildfundkoreaManSeh';
-    src: url(${YoonChildfundkoreaManSeh}) format('otf');
+    src: font-url(${YoonChildfundkoreaManSeh}) format('otf');
 }
 
 @font-face {
     font-family: 'pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css') format('woff');
+    src: font-url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css') format('woff');
     font-weight: normal;
     font-style: normal;
 }
