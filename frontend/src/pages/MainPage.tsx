@@ -52,10 +52,11 @@ const MainPage = () => {
 
   const postData = async () => {
     try {
-      await axios.post('/post/contents', {
+      await axios.post('/posts/contents', {
         title: diaryTitle,
         weather: weather,
         contents: diaryContents,
+        responseType: 'json',
       });
     } catch (error) {
       console.error(error);
@@ -65,7 +66,7 @@ const MainPage = () => {
   const getImageUrl = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get('/post/imageUrl');
+      const { data } = await axios.get('/posts/imageUrl');
       setImageUrl(data.imageUrl);
     } catch (error) {
       console.error(error);
