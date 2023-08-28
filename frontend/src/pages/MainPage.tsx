@@ -208,7 +208,7 @@ const S = {
 
   HighlightedText: styled.span`
     font-weight: 900;
-    font-family: 'YoonChildfundkoreaManSeh';
+    font-family: var(--font-manse) !important;
     font-size: 24px;
   `,
 
@@ -285,7 +285,7 @@ const S = {
     width: 70%;
     padding-left: 20px;
 
-    font-family: YoonChildfundkoreaManSeh;
+    font-family: var(--font-manse) !important;
     letter-spacing: 5px;
   `,
 
@@ -309,7 +309,7 @@ const S = {
     height: 60px;
 
     font-size: 28px;
-    font-family: YoonChildfundkoreaManSeh;
+    font-family: var(--font-manse) !important;
 
     border: 1px solid #333333;
 
