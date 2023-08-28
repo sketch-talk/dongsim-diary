@@ -1,21 +1,22 @@
 import { createGlobalStyle } from 'styled-components';
 import { ResetStyle } from './ResetStyle';
-import YoonChildfundkoreaManSeh from '/assets/font/YoonChildfundkoreaManSeh.otf';
+import YoonChildfundkoreaManSeh from '../assets/font/YoonChildfundkoreaManSeh.otf';
 
 export const GlobalStyle = createGlobalStyle`
 @font-face {
     font-family: 'YoonChildfundkoreaManSeh';
-    src: font-url(${YoonChildfundkoreaManSeh}) format('otf');
+    src: url(${YoonChildfundkoreaManSeh}) format('font-otf');
 }
 
 @font-face {
     font-family: 'pretendard';
-    src: font-url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css') format('woff');
+    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css') format('font-woff');
     font-weight: normal;
     font-style: normal;
 }
 
 ${ResetStyle}
+
   html
   /* Colors *****************************************/
   :root {
