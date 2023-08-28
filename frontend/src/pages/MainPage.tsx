@@ -51,16 +51,18 @@ const MainPage = () => {
   };
 
   const postData = async () => {
+    const data = {
+      title: diaryTitle,
+      weather: weather,
+      contents: diaryContents,
+    };
+
     try {
-      await axios.post(
-        '/posts/contents',
-        {
-          title: diaryTitle,
-          weather: weather,
-          contents: diaryContents,
+      await axios.post('/posts/contents', JSON.stringify(data), {
+        headers: {
+          'Content-Type': `application/json`,
         },
-        { responseType: 'json' }
-      );
+      });
     } catch (error) {
       console.error(error);
     }
