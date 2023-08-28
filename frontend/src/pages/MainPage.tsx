@@ -52,12 +52,15 @@ const MainPage = () => {
 
   const postData = async () => {
     try {
-      await axios.post('/posts/contents', {
-        title: diaryTitle,
-        weather: weather,
-        contents: diaryContents,
-        responseType: 'json',
-      });
+      await axios.post(
+        '/posts/contents',
+        {
+          title: diaryTitle,
+          weather: weather,
+          contents: diaryContents,
+        },
+        { responseType: 'json' }
+      );
     } catch (error) {
       console.error(error);
     }
