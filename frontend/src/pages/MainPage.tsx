@@ -8,6 +8,7 @@ import axios from 'axios';
 import Loading from '../components/Loading/Loading';
 import { capture } from '../utils/capture';
 import Share from '../components/Share/Share';
+import { BASE_URL } from '../constants';
 
 const MainPage = () => {
   const captureRef = useRef<HTMLDivElement | null>(null);
@@ -51,33 +52,24 @@ const MainPage = () => {
   };
 
   const postData = async () => {
+    setIsLoading(true);
     const data = {
       title: diaryTitle,
       weather: weather,
       contents: diaryContents,
     };
 
-    try {
-      await axios.post('/posts/contents', JSON.stringify(data), {
+    await axios
+      .post(`${BASE_URL}/posts/contents`, JSON.stringify(data), {
         headers: {
           'Content-Type': `application/json`,
         },
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getImageUrl = async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.get('/posts/imageUrl');
-      setImageUrl(data.imageUrl);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+      })
+      .then(async (res) => {
+        setImageUrl(res.data.Location);
+        setIsLoading(false);
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
@@ -101,8 +93,6 @@ const MainPage = () => {
     setIsWritten(true);
     postData();
     alert('그림을 생성하겠습니다.');
-
-    getImageUrl();
   };
 
   const handleCapture = () => {
