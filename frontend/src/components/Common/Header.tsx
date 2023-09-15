@@ -21,6 +21,6 @@ const S = {
 
     font-size: 38px;
     font-weight: 700;
-    font-family: YoonChildfundkoreaManSeh;
+    font-family: 'YoonChildfundkoreaManSeh' !important;
   `,
 };

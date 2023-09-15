@@ -8,6 +8,7 @@ export const capture = async (ref: React.RefObject<HTMLDivElement>) => {
         const link = document.createElement('a');
 
         link.href = dataUrl;
+
         link.download = '캡쳐된이미지.png';
         link.click();
       })

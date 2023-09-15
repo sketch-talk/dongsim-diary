@@ -8,6 +8,7 @@ import axios from 'axios';
 import Loading from '../components/Loading/Loading';
 import { capture } from '../utils/capture';
 import Share from '../components/Share/Share';
+import { BASE_URL } from '../constants';
 
 const MainPage = () => {
   const captureRef = useRef<HTMLDivElement | null>(null);
@@ -51,31 +52,41 @@ const MainPage = () => {
   };
 
   const postData = async () => {
-    try {
-      await axios.post(
-        '/posts/contents',
-        {
-          title: diaryTitle,
-          weather: weather,
-          contents: diaryContents,
+    setIsLoading(true);
+    const data = {
+      title: diaryTitle,
+      weather: weather,
+      contents: diaryContents,
+    };
+
+    await axios
+      .post(`${BASE_URL}/posts/contents`, JSON.stringify(data), {
+        headers: {
+          'Content-Type': `application/json`,
         },
-        { responseType: 'json' }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+      })
+      .then(async (res) => {
+        postSaveImage(res.data.Location);
+        setIsLoading(false);
+      })
+      .catch((error) => console.error(error));
   };
 
-  const getImageUrl = async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.get('/posts/imageUrl');
-      setImageUrl(data.imageUrl);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+  const postSaveImage = async (imageUrlFromDalle: string) => {
+    const data = {
+      image_url: imageUrlFromDalle,
+    };
+
+    await axios
+      .post(`${BASE_URL}/posts/save`, JSON.stringify(data), {
+        headers: {
+          'Content-Type': `application/json`,
+        },
+      })
+      .then((res) => {
+        setImageUrl(res.data.image_name);
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
@@ -99,15 +110,14 @@ const MainPage = () => {
     setIsWritten(true);
     postData();
     alert('그림을 생성하겠습니다.');
-
-    getImageUrl();
   };
 
-  const handleCapture = () => {
-    capture(captureRef);
+  const handleCapture = async () => {
+    await capture(captureRef);
   };
 
   const handleShare = () => {
+    console.log(imageUrl);
     alert('준비 중인 기능입니다.');
   };
 
@@ -206,7 +216,7 @@ const S = {
 
   HighlightedText: styled.span`
     font-weight: 900;
-    font-family: 'YoonChildfundkoreaManSeh';
+    font-family: var(--font-manse) !important;
     font-size: 24px;
   `,
 
@@ -283,7 +293,7 @@ const S = {
     width: 70%;
     padding-left: 20px;
 
-    font-family: YoonChildfundkoreaManSeh;
+    font-family: var(--font-manse) !important;
     letter-spacing: 5px;
   `,
 
@@ -307,7 +317,7 @@ const S = {
     height: 60px;
 
     font-size: 28px;
-    font-family: YoonChildfundkoreaManSeh;
+    font-family: var(--font-manse) !important;
 
     border: 1px solid #333333;
 
