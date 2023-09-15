@@ -11,9 +11,9 @@ const Layout: ForwardRefRenderFunction<HTMLDivElement, Props> = (
   ref
 ) => {
   return (
-    <S.LayoutContainer>
+    <S.LayoutContainer ref={ref}>
       <Header />
-      <S.MainWrapper ref={ref}>{children}</S.MainWrapper>
+      <S.MainWrapper>{children}</S.MainWrapper>
     </S.LayoutContainer>
   );
 };
