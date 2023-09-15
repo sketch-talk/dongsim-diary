@@ -68,6 +68,24 @@ const MainPage = () => {
       .then(async (res) => {
         setImageUrl(res.data.Location);
         setIsLoading(false);
+        postSaveImage(res.data.Location);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const postSaveImage = async (imageUrlFromDalle: string) => {
+    const data = {
+      image_url: imageUrlFromDalle,
+    };
+
+    await axios
+      .post(`${BASE_URL}/posts/save`, JSON.stringify(data), {
+        headers: {
+          'Content-Type': `application/json`,
+        },
+      })
+      .then((res) => {
+        setImageUrl(res.data.image_name);
       })
       .catch((error) => console.error(error));
   };
@@ -96,22 +114,7 @@ const MainPage = () => {
   };
 
   const handleCapture = async () => {
-    const data = {
-      image_url: imageUrl,
-    };
-
-    await axios
-      .post(`${BASE_URL}/posts/save`, JSON.stringify(data), {
-        headers: {
-          'Content-Type': `application/json`,
-        },
-      })
-      .then((res) => {
-        setImageUrl(res.data.image_name);
-      })
-      .catch((error) => console.error(error));
-
-    capture(captureRef);
+    await capture(captureRef);
   };
 
   const handleShare = () => {
