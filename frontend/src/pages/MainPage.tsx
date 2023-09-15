@@ -66,9 +66,8 @@ const MainPage = () => {
         },
       })
       .then(async (res) => {
-        setImageUrl(res.data.Location);
-        setIsLoading(false);
         postSaveImage(res.data.Location);
+        setIsLoading(false);
       })
       .catch((error) => console.error(error));
   };
@@ -118,6 +117,7 @@ const MainPage = () => {
   };
 
   const handleShare = () => {
+    console.log(imageUrl);
     alert('준비 중인 기능입니다.');
   };
 
