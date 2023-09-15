@@ -150,7 +150,12 @@ const MainPage = () => {
             <p> 잠시만 기다려주세요.</p>
           </Loading>
         ) : isWritten ? (
-          <img width="256px" height="256px" alt="그림" src={imageUrl} />
+          <img
+            width="256px"
+            height="256px"
+            alt="그림"
+            src={`${BASE_URL}/${imageUrl}`}
+          />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
