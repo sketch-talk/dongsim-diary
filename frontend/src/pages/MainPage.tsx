@@ -95,7 +95,30 @@ const MainPage = () => {
     alert('그림을 생성하겠습니다.');
   };
 
-  const handleCapture = () => {
+  const handleCapture = async () => {
+    try {
+      const response = await axios.get(imageUrl, {
+        responseType: 'arraybuffer',
+      });
+      const blob = new Blob([response.data], { type: 'image/png' });
+
+      const formData = new FormData();
+      formData.append('image', blob, 'image_from_dalle.png');
+
+      axios
+        .post(`${BASE_URL}/photo/save`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((res) => {
+          setImageUrl(res.data.Location);
+        })
+        .catch((error) => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
+
     capture(captureRef);
   };
 
