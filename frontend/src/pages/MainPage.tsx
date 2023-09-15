@@ -154,7 +154,7 @@ const MainPage = () => {
             width="256px"
             height="256px"
             alt="그림"
-            src={`${BASE_URL}/${imageUrl}`}
+            src={`${BASE_URL}/static/${imageUrl}`}
           />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
