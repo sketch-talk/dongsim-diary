@@ -8,7 +8,7 @@ export const handlers = [
     return res(ctx.delay(1000), ctx.status(200), ctx.json(mockData));
   }),
 
-  rest.post('*/photo/save', (_, res, ctx) => {
+  rest.post('*/posts/save', (_, res, ctx) => {
     const mockData = imageUrl;
 
     return res(ctx.delay(1000), ctx.status(200), ctx.json(mockData));
