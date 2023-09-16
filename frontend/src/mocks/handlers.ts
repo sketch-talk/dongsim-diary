@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 import imageUrl from './imageUrl.json';
+import savedImageUrl from './savedImageUrl.json';
 
 export const handlers = [
   rest.post('*/posts/contents', (_, res, ctx) => {
@@ -9,7 +10,7 @@ export const handlers = [
   }),
 
   rest.post('*/posts/save', (_, res, ctx) => {
-    const mockData = imageUrl;
+    const mockData = savedImageUrl;
 
     return res(ctx.delay(1000), ctx.status(200), ctx.json(mockData));
   }),

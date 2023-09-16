@@ -67,7 +67,6 @@ const MainPage = () => {
       })
       .then(async (res) => {
         postSaveImage(res.data.Location);
-        setIsLoading(false);
       })
       .catch((error) => console.error(error));
   };
@@ -85,6 +84,7 @@ const MainPage = () => {
       })
       .then((res) => {
         setImageUrl(res.data.image_name);
+        setIsLoading(false);
       })
       .catch((error) => console.error(error));
   };
@@ -116,10 +116,10 @@ const MainPage = () => {
     await capture(captureRef);
   };
 
-  const handleShare = () => {
-    console.log(imageUrl);
-    alert('준비 중인 기능입니다.');
-  };
+  // const handleShare = () => {
+  //   console.log(imageUrl);
+  //   alert('준비 중인 기능입니다.');
+  // };
 
   return (
     <Layout ref={captureRef}>
@@ -154,7 +154,7 @@ const MainPage = () => {
             width="256px"
             height="256px"
             alt="그림"
-            src={`${BASE_URL}/static/${imageUrl}`}
+            src={`${BASE_URL}/${imageUrl}`}
           />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
@@ -184,9 +184,7 @@ const MainPage = () => {
           />
         )}
       </S.DiaryContentContainer>
-      {isWritten ? (
-        <Share handleShare={handleShare} handleCapture={handleCapture} />
-      ) : null}
+      {isWritten ? <Share handleCapture={handleCapture} /> : null}
     </Layout>
   );
 };
@@ -260,7 +258,7 @@ const S = {
     border-top: none;
 
     & img {
-      padding: 30px;
+      padding: 0 0 20px 0;
     }
   `,
 

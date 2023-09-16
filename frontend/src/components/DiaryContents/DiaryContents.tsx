@@ -50,7 +50,7 @@ const DiaryContents = ({
         </S.CaptionContainer>
       </S.WritingContainer>
       <S.SubmitButton onClick={handleSubmitDiary}>
-        일기 형식으로 저장
+        동심일기 완성하기
       </S.SubmitButton>
     </>
   );

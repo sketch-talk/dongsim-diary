@@ -24,7 +24,9 @@ const S = {
   LayoutContainer: styled.div`
     max-width: 600px;
     height: 100%;
+
     margin: 0 auto;
+    padding: 0px 20px 20px 20px;
   `,
 
   MainWrapper: styled.div``,

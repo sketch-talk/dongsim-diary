@@ -1,10 +1,22 @@
 import { createGlobalStyle } from 'styled-components';
 import { ResetStyle } from './ResetStyle';
+import mainFont from '/assets/font/YoonChildfundkoreaManSeh.woff2';
 
 export const GlobalStyle = createGlobalStyle`
+@font-face {
+  font-family: 'YoonChildfundkoreaManSeh';
+  src: url(${mainFont}) format('woff2');
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
 
 :root {
-      --font-pretendard: 'Pretendard Variable';
+      --font-pretendard: 'Pretendard-Regular';
       --font-manse: 'YoonChildfundkoreaManSeh';
   }
 
