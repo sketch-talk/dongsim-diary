@@ -6,5 +6,4 @@ import { splitVendorChunkPlugin } from 'vite';
 export default defineConfig({
   plugins: [react(), svgr(), splitVendorChunkPlugin()],
   assetsInclude: ['**/*.woff2'],
-  base: '',
 });
