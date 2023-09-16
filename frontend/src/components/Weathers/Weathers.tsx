@@ -2,7 +2,6 @@ import { ReactComponent as CloudIcon } from '../../assets/cloud-icon.svg';
 import { ReactComponent as SunIcon } from '../../assets/sun-icon.svg';
 import { ReactComponent as RainyIcon } from '../../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../../assets/snowman-icon.svg';
-import { ReactComponent as Circle } from '../../assets/circle.svg';
 import { styled } from 'styled-components';
 
 const weatherIcons = [
@@ -21,8 +20,7 @@ const Weathers = ({ weather, handleClickWeather }: Props) => {
   return (
     <>
       {weatherIcons.map(({ Component, type }) => (
-        <S.WeatherIconContainer key={type}>
-          {weather === type && <S.StyledCircle />}
+        <S.WeatherIconContainer key={type} isActive={weather === type}>
           <Component
             onClick={handleClickWeather}
             data-weather={type}
@@ -38,22 +36,15 @@ const Weathers = ({ weather, handleClickWeather }: Props) => {
 export default Weathers;
 
 const S = {
-  WeatherIconContainer: styled.div`
+  WeatherIconContainer: styled.div<{ isActive: boolean }>`
     display: flex;
     align-items: center;
     position: relative;
-
     cursor: pointer;
-  `,
-
-  StyledCircle: styled(Circle)`
-    width: 45px;
-    height: 45px;
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+    transform: ${({ isActive }) => (isActive ? 'scale(1.2)' : 'scale(1)')};
+    border: ${({ isActive }) => (isActive ? '2px solid #f01d1d' : 'none')};
+    border-radius: ${({ isActive }) => (isActive ? '50%' : 'none')};
+    padding: 2px;
+    box-sizing: border-box;
   `,
 };

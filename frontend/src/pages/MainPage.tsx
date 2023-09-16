@@ -20,7 +20,6 @@ const MainPage = () => {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isWritten, setIsWritten] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [captureReady, setCaptureReady] = useState(false);
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -114,14 +113,7 @@ const MainPage = () => {
   };
 
   const handleCapture = () => {
-    if (captureReady) {
-      capture(captureRef);
-      setCaptureReady(false);
-    }
-  };
-
-  const handleCaptureReady = () => {
-    setCaptureReady(true);
+    capture(captureRef);
   };
 
   // const handleShare = () => {
@@ -130,11 +122,7 @@ const MainPage = () => {
   // };
 
   return (
-    <Layout
-      ref={captureRef}
-      captureReady={captureReady}
-      handleCaptureReady={handleCaptureReady}
-    >
+    <Layout ref={captureRef}>
       <S.DateWeatherContainer>
         <S.DateWrapper>
           <S.Date>
