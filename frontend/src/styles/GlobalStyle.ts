@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { ResetStyle } from './ResetStyle';
-import mainFont from '/assets/font/YoonChildfundkoreaManSeh.woff2';
+import mainFont from '/font/YoonChildfundkoreaManSeh.woff2';
 
 export const GlobalStyle = createGlobalStyle`
 @font-face {
