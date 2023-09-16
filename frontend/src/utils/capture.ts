@@ -2,14 +2,12 @@ import * as htmlToImage from 'html-to-image';
 
 export const capture = async (ref: React.RefObject<HTMLDivElement>) => {
   if (ref.current) {
-    htmlToImage
+    await htmlToImage
       .toPng(ref.current, { backgroundColor: '#ffffff' })
       .then((dataUrl) => {
         const link = document.createElement('a');
-
         link.href = dataUrl;
-
-        link.download = '캡쳐된이미지.png';
+        link.download = '동심일기.png';
         link.click();
       })
       .catch((error) => {

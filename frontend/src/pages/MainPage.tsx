@@ -20,6 +20,7 @@ const MainPage = () => {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isWritten, setIsWritten] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [captureReady, setCaptureReady] = useState(false);
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -112,8 +113,15 @@ const MainPage = () => {
     alert('그림을 생성하겠습니다.');
   };
 
-  const handleCapture = async () => {
-    await capture(captureRef);
+  const handleCapture = () => {
+    if (captureReady) {
+      capture(captureRef);
+      setCaptureReady(false);
+    }
+  };
+
+  const handleCaptureReady = () => {
+    setCaptureReady(true);
   };
 
   // const handleShare = () => {
@@ -122,7 +130,11 @@ const MainPage = () => {
   // };
 
   return (
-    <Layout ref={captureRef}>
+    <Layout
+      ref={captureRef}
+      captureReady={captureReady}
+      handleCaptureReady={handleCaptureReady}
+    >
       <S.DateWeatherContainer>
         <S.DateWrapper>
           <S.Date>
@@ -155,6 +167,7 @@ const MainPage = () => {
             height="256px"
             alt="그림"
             src={`${BASE_URL}/${imageUrl}`}
+            crossOrigin="anonymous"
           />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>

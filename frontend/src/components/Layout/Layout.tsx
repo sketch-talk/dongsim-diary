@@ -1,15 +1,21 @@
-import React, { ForwardRefRenderFunction, forwardRef } from 'react';
+import React, { ForwardRefRenderFunction, forwardRef, useEffect } from 'react';
 import Header from '../Common/Header';
 import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
+  handleCaptureReady: () => void;
+  captureReady: boolean;
 }
 
 const Layout: ForwardRefRenderFunction<HTMLDivElement, Props> = (
-  { children },
+  { children, handleCaptureReady, captureReady },
   ref
 ) => {
+  useEffect(() => {
+    handleCaptureReady(); // Reset the captureReady state after capturing
+  }, [captureReady]);
+
   return (
     <S.LayoutContainer ref={ref}>
       <Header />
