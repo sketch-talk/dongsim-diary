@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
@@ -11,9 +11,6 @@ import { usePageRouter } from '../hooks/usePageRouter';
 import { DiaryContext } from '../contexts/DiaryContext';
 
 const MainPage = () => {
-  const captureRef = useRef<HTMLDivElement | null>(null);
-
-  const [isWritten, setIsWritten] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { diaryTitle, weather, diaryContents, setDiaryContent } =
     useContext(DiaryContext);
@@ -41,8 +38,6 @@ const MainPage = () => {
   const handleClickWeather = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>
   ) => {
-    if (isWritten) return;
-
     const weatherType = e.currentTarget.getAttribute('data-weather');
 
     if (weatherType) {
@@ -87,7 +82,8 @@ const MainPage = () => {
           imageUrl: res.data.image_name,
         }));
         setIsLoading(false);
-        goToResultPage(res.data.image_name);
+
+        goToResultPage(res.data.image_name.replace('static/', ''));
       })
       .catch((error) => console.error(error));
   };
@@ -110,7 +106,6 @@ const MainPage = () => {
     const char = diaryContents.split('');
 
     setDiaryContent((prev) => ({ ...prev, diaryCharacters: char }));
-    setIsWritten(true);
     postData();
     alert('그림을 생성하겠습니다.');
   };
@@ -121,7 +116,7 @@ const MainPage = () => {
   // };
 
   return (
-    <Layout ref={captureRef}>
+    <Layout>
       <S.DateWeatherContainer>
         <S.DateWrapper>
           <S.Date>
