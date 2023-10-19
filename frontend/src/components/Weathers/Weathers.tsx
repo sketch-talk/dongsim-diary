@@ -13,7 +13,7 @@ const weatherIcons = [
 
 interface Props {
   weather: string;
-  handleClickWeather: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  handleClickWeather?: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
 }
 
 const Weathers = ({ weather, handleClickWeather }: Props) => {

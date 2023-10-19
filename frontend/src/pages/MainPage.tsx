@@ -1,31 +1,30 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react';
 import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
 import Loading from '../components/Loading/Loading';
-import { capture } from '../utils/capture';
-import Share from '../components/Share/Share';
 import { BASE_URL } from '../constants';
+import { usePageRouter } from '../hooks/usePageRouter';
+import { DiaryContext } from '../contexts/DiaryContext';
 
 const MainPage = () => {
   const captureRef = useRef<HTMLDivElement | null>(null);
 
-  const [diaryTitle, setDiaryTitle] = useState<string>('');
-  const [weather, setWeather] = useState<string>('');
-  const [diaryContents, setDiaryContents] = useState<string>('');
-  const [diaryCharacters, setDiaryCharacters] = useState<string[]>([]);
-  const [imageUrl, setImageUrl] = useState<string>('');
   const [isWritten, setIsWritten] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { diaryTitle, weather, diaryContents, setDiaryContent } =
+    useContext(DiaryContext);
+
+  const { goToResultPage } = usePageRouter();
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     if (inputValue.length >= 16) return;
 
-    setDiaryTitle(inputValue);
+    setDiaryContent((prev) => ({ ...prev, diaryTitle: inputValue }));
   };
 
   const handleResizeHeight = (e: FormEvent<HTMLTextAreaElement>) => {
@@ -36,7 +35,7 @@ const MainPage = () => {
 
     if (inputValue.length > 100) return;
 
-    setDiaryContents(inputValue);
+    setDiaryContent((prev) => ({ ...prev, diaryContents: inputValue }));
   };
 
   const handleClickWeather = (
@@ -47,7 +46,7 @@ const MainPage = () => {
     const weatherType = e.currentTarget.getAttribute('data-weather');
 
     if (weatherType) {
-      setWeather(weatherType);
+      setDiaryContent((prev) => ({ ...prev, weather: weatherType }));
     }
   };
 
@@ -83,8 +82,12 @@ const MainPage = () => {
         },
       })
       .then((res) => {
-        setImageUrl(res.data.image_name);
+        setDiaryContent((prev) => ({
+          ...prev,
+          imageUrl: res.data.image_name,
+        }));
         setIsLoading(false);
+        goToResultPage(res.data.image_name);
       })
       .catch((error) => console.error(error));
   };
@@ -106,14 +109,10 @@ const MainPage = () => {
 
     const char = diaryContents.split('');
 
-    setDiaryCharacters(char);
+    setDiaryContent((prev) => ({ ...prev, diaryCharacters: char }));
     setIsWritten(true);
     postData();
     alert('그림을 생성하겠습니다.');
-  };
-
-  const handleCapture = () => {
-    capture(captureRef);
   };
 
   // const handleShare = () => {
@@ -149,43 +148,20 @@ const MainPage = () => {
             <p>이미지를 생성 중입니다.</p>
             <p> 잠시만 기다려주세요.</p>
           </Loading>
-        ) : isWritten ? (
-          <img
-            width="256px"
-            height="256px"
-            alt="그림"
-            src={`${BASE_URL}/${imageUrl}`}
-            crossOrigin="anonymous"
-          />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
       </S.DrawingWrapper>
 
       <S.DiaryContentContainer>
-        {isWritten ? (
-          <>
-            <S.diaryTitleContainer>
-              <S.diaryTitle>제목</S.diaryTitle>
-              <S.diaryTitleWritten>{diaryTitle}</S.diaryTitleWritten>
-            </S.diaryTitleContainer>
-            <S.CharacterInputContainer>
-              {diaryCharacters.map((item, index) => {
-                return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
-              })}
-            </S.CharacterInputContainer>
-          </>
-        ) : (
-          <DiaryContents
-            diaryTitle={diaryTitle}
-            diaryContents={diaryContents}
-            handleChangeTitleInput={handleChangeTitleInput}
-            handleResizeHeight={handleResizeHeight}
-            handleSubmitDiary={handleSubmitDiary}
-          />
-        )}
+        <DiaryContents
+          diaryTitle={diaryTitle}
+          diaryContents={diaryContents}
+          handleChangeTitleInput={handleChangeTitleInput}
+          handleResizeHeight={handleResizeHeight}
+          handleSubmitDiary={handleSubmitDiary}
+        />
       </S.DiaryContentContainer>
-      {isWritten ? <Share handleCapture={handleCapture} /> : null}
     </Layout>
   );
 };
