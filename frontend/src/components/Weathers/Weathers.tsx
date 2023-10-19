@@ -20,7 +20,7 @@ const Weathers = ({ weather, handleClickWeather }: Props) => {
   return (
     <>
       {weatherIcons.map(({ Component, type }) => (
-        <S.WeatherIconContainer key={type} isActive={weather === type}>
+        <S.WeatherIconContainer key={type} $isActive={weather === type}>
           <Component
             onClick={handleClickWeather}
             data-weather={type}
@@ -36,14 +36,14 @@ const Weathers = ({ weather, handleClickWeather }: Props) => {
 export default Weathers;
 
 const S = {
-  WeatherIconContainer: styled.div<{ isActive: boolean }>`
+  WeatherIconContainer: styled.div<{ $isActive: boolean }>`
     display: flex;
     align-items: center;
     position: relative;
     cursor: pointer;
-    transform: ${({ isActive }) => (isActive ? 'scale(1.2)' : 'scale(1)')};
-    border: ${({ isActive }) => (isActive ? '2px solid #f01d1d' : 'none')};
-    border-radius: ${({ isActive }) => (isActive ? '50%' : 'none')};
+    transform: ${({ $isActive }) => ($isActive ? 'scale(1.2)' : 'scale(1)')};
+    border: ${({ $isActive }) => ($isActive ? '2px solid #f01d1d' : 'none')};
+    border-radius: ${({ $isActive }) => ($isActive ? '50%' : 'none')};
     padding: 2px;
     box-sizing: border-box;
   `,
