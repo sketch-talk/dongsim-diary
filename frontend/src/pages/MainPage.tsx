@@ -1,6 +1,12 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
@@ -35,15 +41,16 @@ const MainPage = () => {
     setDiaryContent((prev) => ({ ...prev, diaryContents: inputValue }));
   };
 
-  const handleClickWeather = (
-    e: React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
-    const weatherType = e.currentTarget.getAttribute('data-weather');
+  const handleClickWeather = useCallback(
+    (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+      const weatherType = e.currentTarget.getAttribute('data-weather');
 
-    if (weatherType) {
-      setDiaryContent((prev) => ({ ...prev, weather: weatherType }));
-    }
-  };
+      if (weatherType) {
+        setDiaryContent((prev) => ({ ...prev, weather: weatherType }));
+      }
+    },
+    [setDiaryContent]
+  );
 
   const postData = async () => {
     setIsLoading(true);
