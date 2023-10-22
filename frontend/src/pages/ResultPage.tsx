@@ -1,11 +1,11 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
 import { useContext } from 'react';
-import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import Weathers from '../components/Weathers/Weathers';
 import Share from '../components/Share/Share';
 import { BASE_URL } from '../constants';
 import { DiaryContext } from '../contexts/DiaryContext';
+import Date from '../components/Date/Date';
 
 const ResultPage = () => {
   const { diaryTitle, weather, imageUrl, diaryCharacters } =
@@ -14,14 +14,7 @@ const ResultPage = () => {
   return (
     <Layout>
       <S.DateWeatherContainer>
-        <S.DateWrapper>
-          <S.Date>
-            <S.HighlightedText>{getYear}</S.HighlightedText>년
-            <S.HighlightedText>{getMonth}</S.HighlightedText>월
-            <S.HighlightedText>{getDate}</S.HighlightedText>일
-            <S.HighlightedText>{day[getDay]}</S.HighlightedText>요일
-          </S.Date>
-        </S.DateWrapper>
+        <Date />
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>
