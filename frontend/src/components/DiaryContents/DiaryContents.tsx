@@ -7,6 +7,7 @@ interface Props {
   handleChangeTitleInput: (e: ChangeEvent<HTMLInputElement>) => void;
   handleResizeHeight: (e: FormEvent<HTMLTextAreaElement>) => void;
   handleSubmitDiary: (e: FormEvent<HTMLButtonElement>) => void;
+  disabled: boolean;
 }
 
 const DiaryContents = ({
@@ -15,6 +16,7 @@ const DiaryContents = ({
   handleChangeTitleInput,
   handleResizeHeight,
   handleSubmitDiary,
+  disabled,
 }: Props) => {
   return (
     <>
@@ -49,9 +51,11 @@ const DiaryContents = ({
           <S.TitleLength>{diaryContents.length}/100</S.TitleLength>
         </S.CaptionContainer>
       </S.WritingContainer>
-      <S.SubmitButton onClick={handleSubmitDiary}>
-        동심일기 완성하기
-      </S.SubmitButton>
+      {disabled ? null : (
+        <S.SubmitButton disabled={disabled} onClick={handleSubmitDiary}>
+          동심일기 완성하기
+        </S.SubmitButton>
+      )}
     </>
   );
 };

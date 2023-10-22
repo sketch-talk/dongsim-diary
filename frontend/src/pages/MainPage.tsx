@@ -148,6 +148,7 @@ const MainPage = () => {
           handleChangeTitleInput={handleChangeTitleInput}
           handleResizeHeight={handleResizeHeight}
           handleSubmitDiary={handleSubmitDiary}
+          disabled={isLoading ? true : false}
         />
       </S.DiaryContentContainer>
     </Layout>
