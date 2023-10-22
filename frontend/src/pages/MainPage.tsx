@@ -1,7 +1,6 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
 import { ChangeEvent, FormEvent, useContext, useState } from 'react';
-import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
@@ -9,6 +8,7 @@ import Loading from '../components/Loading/Loading';
 import { BASE_URL } from '../constants';
 import { usePageRouter } from '../hooks/usePageRouter';
 import { DiaryContext } from '../contexts/DiaryContext';
+import Date from '../components/Date/Date';
 
 const MainPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -118,14 +118,7 @@ const MainPage = () => {
   return (
     <Layout>
       <S.DateWeatherContainer>
-        <S.DateWrapper>
-          <S.Date>
-            <S.HighlightedText>{getYear}</S.HighlightedText>년
-            <S.HighlightedText>{getMonth}</S.HighlightedText>월
-            <S.HighlightedText>{getDate}</S.HighlightedText>일
-            <S.HighlightedText>{day[getDay]}</S.HighlightedText>요일
-          </S.Date>
-        </S.DateWrapper>
+        <Date />
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>
@@ -169,30 +162,6 @@ const S = {
     flex-direction: column;
 
     border-top: none;
-  `,
-
-  DateWrapper: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-
-    border: 1px solid var(--base-color);
-  `,
-
-  Date: styled.p`
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    height: 45px;
-    padding-left: 15px;
-  `,
-
-  HighlightedText: styled.span`
-    font-weight: 900;
-    font-family: var(--font-manse) !important;
-    font-size: 24px;
   `,
 
   WeatherWrapper: styled.div`
