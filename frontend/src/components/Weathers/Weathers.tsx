@@ -3,6 +3,7 @@ import { ReactComponent as SunIcon } from '../../assets/sun-icon.svg';
 import { ReactComponent as RainyIcon } from '../../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../../assets/snowman-icon.svg';
 import { styled } from 'styled-components';
+import React from 'react';
 
 const weatherIcons = [
   { Component: SunIcon, type: 'sunny' },
@@ -16,7 +17,7 @@ interface Props {
   handleClickWeather?: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
 }
 
-const Weathers = ({ weather, handleClickWeather }: Props) => {
+const Weathers = React.memo(({ weather, handleClickWeather }: Props) => {
   return (
     <>
       {weatherIcons.map(({ Component, type }) => (
@@ -31,7 +32,7 @@ const Weathers = ({ weather, handleClickWeather }: Props) => {
       ))}
     </>
   );
-};
+});
 
 export default Weathers;
 
