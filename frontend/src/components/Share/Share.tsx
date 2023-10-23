@@ -19,7 +19,10 @@ const Share = () => {
     script.async = true;
     document.body.appendChild(script);
 
-    return () => document.body.removeChild(script);
+    return () => {
+      document.body.removeChild(script);
+      return undefined;
+    };
   }, []);
 
   const handleShareButton = (imageUrl: string, title: string) => {
