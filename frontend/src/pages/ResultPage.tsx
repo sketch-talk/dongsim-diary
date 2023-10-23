@@ -50,7 +50,7 @@ const ResultPage = () => {
           </S.CharacterInputContainer>
         </>
       </S.DiaryContentContainer>
-      <Share handleCapture={() => {}} />
+      <Share />
     </Layout>
   );
 };

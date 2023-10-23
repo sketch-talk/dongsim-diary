@@ -2,10 +2,30 @@ import { ReactComponent as KakaoTalk } from '../../assets/kakao_icon.svg';
 import { ReactComponent as Instagram } from '../../assets/instagram_icon.svg';
 import { styled } from 'styled-components';
 import { createPortal } from 'react-dom';
+import { useContext, useEffect } from 'react';
+import { shareKakao } from '../../utils/shareKaKaoLink';
+import { DiaryContext } from '../../contexts/DiaryContext';
 
 const Share = () => {
+  const { diaryTitle, imageUrl } = useContext(DiaryContext);
+
   const handleShare = () => {
     alert('아직 준비중인 기능이에요🥲');
+  };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => document.body.removeChild(script);
+  }, []);
+
+  const handleShareButton = (imageUrl: string, title: string) => {
+    const imageName = imageUrl.replace('static/', '');
+
+    shareKakao(imageName, title);
   };
 
   return createPortal(
@@ -13,7 +33,11 @@ const Share = () => {
       <S.ShareIconContainer>
         <S.ShareIcon>
           <p>내 동심일기 공유하기</p>
-          <KakaoTalk onClick={handleShare} width="33px" height="33px" />
+          <KakaoTalk
+            onClick={() => handleShareButton(`${imageUrl}`, diaryTitle)}
+            width="33px"
+            height="33px"
+          />
           <Instagram onClick={handleShare} width="33px" height="33px" />
         </S.ShareIcon>
         <S.ReWriteButton href="/">다시 쓰기</S.ReWriteButton>
