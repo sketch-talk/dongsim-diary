@@ -4,6 +4,7 @@ import { ReactComponent as RainyIcon } from '../../assets/rainy-icon.svg';
 import { ReactComponent as SnowmanIcon } from '../../assets/snowman-icon.svg';
 import { ReactComponent as Circle } from '../../assets/circle.svg';
 import { styled } from 'styled-components';
+import React from 'react';
 
 const weatherIcons = [
   { Component: SunIcon, type: 'sunny' },
@@ -14,10 +15,10 @@ const weatherIcons = [
 
 interface Props {
   weather: string;
-  handleClickWeather: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  handleClickWeather?: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
 }
 
-const Weathers = ({ weather, handleClickWeather }: Props) => {
+const Weathers = React.memo(({ weather, handleClickWeather }: Props) => {
   return (
     <>
       {weatherIcons.map(({ Component, type }) => (
@@ -33,7 +34,7 @@ const Weathers = ({ weather, handleClickWeather }: Props) => {
       ))}
     </>
   );
-};
+});
 
 export default Weathers;
 
@@ -42,14 +43,13 @@ const S = {
     display: flex;
     align-items: center;
     position: relative;
-
     cursor: pointer;
+    box-sizing: border-box;
   `,
 
   StyledCircle: styled(Circle)`
     width: 45px;
     height: 45px;
-
     position: absolute;
     top: 50%;
     left: 50%;

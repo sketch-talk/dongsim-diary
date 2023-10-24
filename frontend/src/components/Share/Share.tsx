@@ -1,25 +1,49 @@
-import { ReactComponent as Facebook } from '../../assets/facebook-icon.svg';
-import { ReactComponent as KakaoTalk } from '../../assets/kakao-icon.svg';
-import { ReactComponent as Instagram } from '../../assets/insta-icon.svg';
+import { ReactComponent as KakaoTalk } from '../../assets/kakao_icon.svg';
+import { ReactComponent as Instagram } from '../../assets/instagram_icon.svg';
 import { styled } from 'styled-components';
 import { createPortal } from 'react-dom';
+import { useContext, useEffect } from 'react';
+import { shareKakao } from '../../utils/shareKaKaoLink';
+import { DiaryContext } from '../../contexts/DiaryContext';
 
-interface Props {
-  handleCapture: () => void;
-  handleShare: () => void;
-}
+const Share = () => {
+  const { diaryTitle, imageUrl } = useContext(DiaryContext);
 
-const Share = ({ handleCapture, handleShare }: Props) => {
+  const handleShare = () => {
+    alert('아직 준비중인 기능이에요🥲');
+  };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+      return undefined;
+    };
+  }, []);
+
+  const handleShareButton = (imageUrl: string, title: string) => {
+    const imageName = imageUrl.replace('static/', '');
+
+    shareKakao(imageName, title);
+  };
+
   return createPortal(
     <S.ShareContainer>
       <S.ShareIconContainer>
-        <S.SaveButton onClick={handleCapture}>이미지로 저장하기</S.SaveButton>
         <S.ShareIcon>
           <p>내 동심일기 공유하기</p>
+          <KakaoTalk
+            onClick={() => handleShareButton(`${imageUrl}`, diaryTitle)}
+            width="33px"
+            height="33px"
+          />
           <Instagram onClick={handleShare} width="33px" height="33px" />
-          <Facebook onClick={handleShare} width="31px" height="31px" />
-          <KakaoTalk onClick={handleShare} width="30px" height="30px" />
         </S.ShareIcon>
+        <S.ReWriteButton href="/">다시 쓰기</S.ReWriteButton>
       </S.ShareIconContainer>
     </S.ShareContainer>,
     document.getElementById('share-root') as HTMLDivElement
@@ -37,9 +61,10 @@ const S = {
 
   ShareIconContainer: styled.div`
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 15px;
+    flex-direction: column;
+    gap: 24px;
 
     margin: 40px 10px;
   `,
@@ -60,5 +85,20 @@ const S = {
 
     background-color: #333333;
     color: #ffffff;
+  `,
+
+  ReWriteButton: styled.a`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 150px;
+    height: 30px;
+
+    border-radius: 8px;
+    border: 1px solid #333333;
+
+    background-color: #ffffff;
+    color: #333333;
   `,
 };

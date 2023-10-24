@@ -1,31 +1,33 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import { day, getDate, getDay, getMonth, getYear } from '../utils/date';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import DiaryContents from '../components/DiaryContents/DiaryContents';
 import Weathers from '../components/Weathers/Weathers';
 import axios from 'axios';
 import Loading from '../components/Loading/Loading';
-import { capture } from '../utils/capture';
-import Share from '../components/Share/Share';
 import { BASE_URL } from '../constants';
+import { usePageRouter } from '../hooks/usePageRouter';
+import { DiaryContext } from '../contexts/DiaryContext';
+import Date from '../components/Date/Date';
 
 const MainPage = () => {
-  const captureRef = useRef<HTMLDivElement | null>(null);
-
-  const [diaryTitle, setDiaryTitle] = useState<string>('');
-  const [weather, setWeather] = useState<string>('');
-  const [diaryContents, setDiaryContents] = useState<string>('');
-  const [diaryCharacters, setDiaryCharacters] = useState<string[]>([]);
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [isWritten, setIsWritten] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { diaryTitle, weather, diaryContents, setDiaryContent } =
+    useContext(DiaryContext);
+
+  const { goToResultPage } = usePageRouter();
 
   const handleChangeTitleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     if (inputValue.length >= 16) return;
 
-    setDiaryTitle(inputValue);
+    setDiaryContent((prev) => ({ ...prev, diaryTitle: inputValue }));
   };
 
   const handleResizeHeight = (e: FormEvent<HTMLTextAreaElement>) => {
@@ -36,20 +38,19 @@ const MainPage = () => {
 
     if (inputValue.length > 100) return;
 
-    setDiaryContents(inputValue);
+    setDiaryContent((prev) => ({ ...prev, diaryContents: inputValue }));
   };
 
-  const handleClickWeather = (
-    e: React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
-    if (isWritten) return;
+  const handleClickWeather = useCallback(
+    (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+      const weatherType = e.currentTarget.getAttribute('data-weather');
 
-    const weatherType = e.currentTarget.getAttribute('data-weather');
-
-    if (weatherType) {
-      setWeather(weatherType);
-    }
-  };
+      if (weatherType) {
+        setDiaryContent((prev) => ({ ...prev, weather: weatherType }));
+      }
+    },
+    [setDiaryContent]
+  );
 
   const postData = async () => {
     setIsLoading(true);
@@ -67,7 +68,6 @@ const MainPage = () => {
       })
       .then(async (res) => {
         postSaveImage(res.data.Location);
-        setIsLoading(false);
       })
       .catch((error) => console.error(error));
   };
@@ -84,7 +84,13 @@ const MainPage = () => {
         },
       })
       .then((res) => {
-        setImageUrl(res.data.image_name);
+        setDiaryContent((prev) => ({
+          ...prev,
+          imageUrl: res.data.image_name,
+        }));
+        setIsLoading(false);
+
+        goToResultPage(res.data.image_name.replace('static/', ''));
       })
       .catch((error) => console.error(error));
   };
@@ -106,32 +112,20 @@ const MainPage = () => {
 
     const char = diaryContents.split('');
 
-    setDiaryCharacters(char);
-    setIsWritten(true);
+    setDiaryContent((prev) => ({ ...prev, diaryCharacters: char }));
     postData();
     alert('그림을 생성하겠습니다.');
   };
 
-  const handleCapture = async () => {
-    await capture(captureRef);
-  };
-
-  const handleShare = () => {
-    console.log(imageUrl);
-    alert('준비 중인 기능입니다.');
-  };
+  // const handleShare = () => {
+  //   console.log(imageUrl);
+  //   alert('준비 중인 기능입니다.');
+  // };
 
   return (
-    <Layout ref={captureRef}>
+    <Layout>
       <S.DateWeatherContainer>
-        <S.DateWrapper>
-          <S.Date>
-            <S.HighlightedText>{getYear}</S.HighlightedText>년
-            <S.HighlightedText>{getMonth}</S.HighlightedText>월
-            <S.HighlightedText>{getDate}</S.HighlightedText>일
-            <S.HighlightedText>{day[getDay]}</S.HighlightedText>요일
-          </S.Date>
-        </S.DateWrapper>
+        <Date />
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>
@@ -149,44 +143,21 @@ const MainPage = () => {
             <p>이미지를 생성 중입니다.</p>
             <p> 잠시만 기다려주세요.</p>
           </Loading>
-        ) : isWritten ? (
-          <img
-            width="256px"
-            height="256px"
-            alt="그림"
-            src={`${BASE_URL}/static/${imageUrl}`}
-          />
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
       </S.DrawingWrapper>
 
       <S.DiaryContentContainer>
-        {isWritten ? (
-          <>
-            <S.diaryTitleContainer>
-              <S.diaryTitle>제목</S.diaryTitle>
-              <S.diaryTitleWritten>{diaryTitle}</S.diaryTitleWritten>
-            </S.diaryTitleContainer>
-            <S.CharacterInputContainer>
-              {diaryCharacters.map((item, index) => {
-                return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
-              })}
-            </S.CharacterInputContainer>
-          </>
-        ) : (
-          <DiaryContents
-            diaryTitle={diaryTitle}
-            diaryContents={diaryContents}
-            handleChangeTitleInput={handleChangeTitleInput}
-            handleResizeHeight={handleResizeHeight}
-            handleSubmitDiary={handleSubmitDiary}
-          />
-        )}
+        <DiaryContents
+          diaryTitle={diaryTitle}
+          diaryContents={diaryContents}
+          handleChangeTitleInput={handleChangeTitleInput}
+          handleResizeHeight={handleResizeHeight}
+          handleSubmitDiary={handleSubmitDiary}
+          disabled={isLoading ? true : false}
+        />
       </S.DiaryContentContainer>
-      {isWritten ? (
-        <Share handleShare={handleShare} handleCapture={handleCapture} />
-      ) : null}
     </Layout>
   );
 };
@@ -199,30 +170,6 @@ const S = {
     flex-direction: column;
 
     border-top: none;
-  `,
-
-  DateWrapper: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-
-    border: 1px solid var(--base-color);
-  `,
-
-  Date: styled.p`
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    height: 45px;
-    padding-left: 15px;
-  `,
-
-  HighlightedText: styled.span`
-    font-weight: 900;
-    font-family: var(--font-manse) !important;
-    font-size: 24px;
   `,
 
   WeatherWrapper: styled.div`
@@ -260,7 +207,7 @@ const S = {
     border-top: none;
 
     & img {
-      padding: 30px;
+      padding: 0 0 20px 0;
     }
   `,
 
