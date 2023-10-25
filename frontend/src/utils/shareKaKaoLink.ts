@@ -7,7 +7,7 @@ export const shareKakao = (imageName: string, title: string) => {
     if (!kakao.isInitialized()) {
       kakao.init(import.meta.env.VITE_KAKAO_API_KEY); // 카카오에서 제공받은 javascript key를 넣어줌 -> .env파일에서 호출시킴
     }
-    kakao.Link.sendDefault({
+    kakao.Share.sendDefault({
       objectType: 'feed', // 카카오 링크 공유 여러 type들 중 feed라는 타입 -> 자세한 건 카카오에서 확인
       content: {
         title: title, // 인자값으로 받은 title

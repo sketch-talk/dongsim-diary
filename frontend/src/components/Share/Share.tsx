@@ -26,8 +26,9 @@ const Share = () => {
 
   const handleShareButton = (imageUrl: string, title: string) => {
     const imageName = imageUrl.replace('static/', '');
+    const parsedImageName = imageName.replace('.png', '');
 
-    shareKakao(imageName, title);
+    shareKakao(parsedImageName, title);
   };
 
   const handleCopyClipBoard = async (text: string) => {
