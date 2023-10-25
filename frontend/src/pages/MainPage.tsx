@@ -73,7 +73,9 @@ const MainPage = () => {
         }));
         setIsLoading(false);
 
-        goToResultPage(res.data.image_name.replace('static/', ''));
+        const routerImageName = res.data.image_name.replace('static/', '');
+
+        goToResultPage(routerImageName.replace('.png', ''));
       })
       .catch((error) => console.error(error));
   };
