@@ -140,6 +140,15 @@ const MainPage = () => {
           disabled={isLoading ? true : false}
         />
       </S.DiaryContentContainer>
+      <S.ProfileContainer>
+        <p>만든놈:</p>
+        <S.Profile href="https://github.com/gyeongza" target="_blank">
+          박경현,
+        </S.Profile>
+        <S.Profile href="https://github.com/ss3un9" target="_blank">
+          박승현
+        </S.Profile>
+      </S.ProfileContainer>
     </Layout>
   );
 };
@@ -261,4 +270,16 @@ const S = {
   `,
 
   ShareContainer: styled.div``,
+
+  ProfileContainer: styled.div`
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    font-family: var(--font-manse);
+    margin: 40px 0 20px 0;
+  `,
+
+  Profile: styled.a`
+    cursor: pointer;
+  `,
 };

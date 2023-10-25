@@ -28,6 +28,7 @@ const DiaryContents = ({
               value={diaryTitle}
               onChange={handleChangeTitleInput}
               placeholder="일기 제목을 입력해주세요."
+              autoFocus
             />
             <S.TitleLength>{diaryTitle.length}/15</S.TitleLength>
           </S.InputContainer>

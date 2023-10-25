@@ -95,7 +95,7 @@ const S = {
     flex-direction: column;
     gap: 24px;
 
-    margin: 40px 10px;
+    margin: 10px 10px 30px 10px;
   `,
 
   ShareIcon: styled.div`
