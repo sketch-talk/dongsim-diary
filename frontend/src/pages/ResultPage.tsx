@@ -1,16 +1,45 @@
 import { styled } from 'styled-components';
 import Layout from '../components/Layout/Layout';
-import { SyntheticEvent, useContext } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import Weathers from '../components/Weathers/Weathers';
 import Share from '../components/Share/Share';
 import { BASE_URL } from '../constants';
-import { DiaryContext } from '../contexts/DiaryContext';
 import Date from '../components/Date/Date';
 import defaultImage from '../../public/default_image.png';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { GetDiaryResponse } from '../types/post';
 
 const ResultPage = () => {
-  const { diaryTitle, weather, imageUrl, diaryCharacters } =
-    useContext(DiaryContext);
+  const [diaryContent, setDiaryContent] = useState<GetDiaryResponse>({
+    date: '',
+    title: '',
+    contents: '',
+    weather: '',
+    img_name: '',
+  });
+
+  const { imageUrl } = useParams();
+
+  useEffect(() => {
+    const getPost = async () => {
+      await axios
+        .get<GetDiaryResponse>(`${BASE_URL}/posts/result/${imageUrl}`)
+        .then(async (res) => {
+          setDiaryContent((prev) => ({
+            ...prev,
+            date: res.data.date,
+            title: res.data.title,
+            weather: res.data.weather,
+            contents: res.data.contents,
+            img_name: res.data.img_name,
+          }));
+        })
+        .catch((error) => console.error(error));
+    };
+
+    getPost();
+  }, []);
 
   const onErrorImg = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = defaultImage;
@@ -23,7 +52,7 @@ const ResultPage = () => {
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>
-            <Weathers weather={weather} />
+            <Weathers weather={diaryContent.weather} />
           </S.Weather>
         </S.WeatherWrapper>
       </S.DateWeatherContainer>
@@ -32,7 +61,7 @@ const ResultPage = () => {
           width="256px"
           height="256px"
           alt="그림"
-          src={`${BASE_URL}/${imageUrl}`}
+          src={`${BASE_URL}/static/${diaryContent.img_name}`}
           crossOrigin="anonymous"
           onError={onErrorImg}
         />
@@ -41,10 +70,10 @@ const ResultPage = () => {
         <>
           <S.diaryTitleContainer>
             <S.diaryTitle>제목</S.diaryTitle>
-            <S.diaryTitleWritten>{diaryTitle}</S.diaryTitleWritten>
+            <S.diaryTitleWritten>{diaryContent.title}</S.diaryTitleWritten>
           </S.diaryTitleContainer>
           <S.CharacterInputContainer>
-            {diaryCharacters.map((item, index) => {
+            {diaryContent.contents.split('').map((item, index) => {
               return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
             })}
           </S.CharacterInputContainer>

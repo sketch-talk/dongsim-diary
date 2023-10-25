@@ -1,19 +1,12 @@
 import { createContext, useState } from 'react';
+import { Diary } from '../types/post';
 
 interface Props {
   children: React.ReactNode;
 }
 
-interface DiaryState {
-  diaryTitle: string;
-  weather: string;
-  diaryContents: string;
-  diaryCharacters: string[];
-  imageUrl: string;
-}
-
-interface DiaryContextType extends DiaryState {
-  setDiaryContent: React.Dispatch<React.SetStateAction<DiaryState>>;
+interface DiaryContextType extends Diary {
+  setDiaryContent: React.Dispatch<React.SetStateAction<Diary>>;
 }
 
 const defaultContextValue: DiaryContextType = {
@@ -29,7 +22,7 @@ export const DiaryContext =
   createContext<DiaryContextType>(defaultContextValue);
 
 const DiaryProvider: React.FC<Props> = ({ children }) => {
-  const [diaryContent, setDiaryContent] = useState<DiaryState>({
+  const [diaryContent, setDiaryContent] = useState<Diary>({
     diaryTitle: '',
     weather: '',
     diaryContents: '',
