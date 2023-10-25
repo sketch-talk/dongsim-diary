@@ -19,12 +19,12 @@ const ResultPage = () => {
     img_name: '',
   });
 
-  const { imageUrl } = useParams();
+  const params = useParams();
 
   useEffect(() => {
     const getPost = async () => {
       await axios
-        .get<GetDiaryResponse>(`${BASE_URL}/posts/result/${imageUrl}`)
+        .get<GetDiaryResponse>(`${BASE_URL}/posts/result/${params.postId}`)
         .then(async (res) => {
           setDiaryContent((prev) => ({
             ...prev,
@@ -61,7 +61,7 @@ const ResultPage = () => {
           width="256px"
           height="256px"
           alt="그림"
-          src={`${BASE_URL}/static/${diaryContent.img_name}`}
+          src={`${BASE_URL}/${diaryContent.img_name}`}
           crossOrigin="anonymous"
           onError={onErrorImg}
         />

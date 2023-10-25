@@ -93,9 +93,6 @@ const MainPage = () => {
       return alert('일기 내용을 작성해주세요 🥺');
     }
 
-    const char = diaryContents.split('');
-
-    setDiaryContent((prev) => ({ ...prev, diaryCharacters: char }));
     postData();
     alert('그림을 생성하겠습니다.');
   };
