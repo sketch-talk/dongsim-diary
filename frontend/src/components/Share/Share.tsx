@@ -1,17 +1,16 @@
 import { ReactComponent as KakaoTalk } from '../../assets/kakao_icon.svg';
-import { ReactComponent as Instagram } from '../../assets/instagram_icon.svg';
+import { ReactComponent as Link } from '../../assets/link_icon.svg';
 import { styled } from 'styled-components';
 import { createPortal } from 'react-dom';
 import { useContext, useEffect } from 'react';
 import { shareKakao } from '../../utils/shareKaKaoLink';
 import { DiaryContext } from '../../contexts/DiaryContext';
+import { useLocation } from 'react-router-dom';
+import { BASE_URL } from '../../constants';
 
 const Share = () => {
   const { diaryTitle, imageUrl } = useContext(DiaryContext);
-
-  const handleShare = () => {
-    alert('아직 준비중인 기능이에요🥲');
-  };
+  const location = useLocation();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -31,6 +30,15 @@ const Share = () => {
     shareKakao(imageName, title);
   };
 
+  const handleCopyClipBoard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('클립보드에 링크가 복사되었어요.');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return createPortal(
     <S.ShareContainer>
       <S.ShareIconContainer>
@@ -41,7 +49,13 @@ const Share = () => {
             width="33px"
             height="33px"
           />
-          <Instagram onClick={handleShare} width="33px" height="33px" />
+          <Link
+            onClick={() =>
+              handleCopyClipBoard(`${BASE_URL}${location.pathname}`)
+            }
+            width="33px"
+            height="33px"
+          />
         </S.ShareIcon>
         <S.ReWriteButton href="/">다시 쓰기</S.ReWriteButton>
       </S.ShareIconContainer>
