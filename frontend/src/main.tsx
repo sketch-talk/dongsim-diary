@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { GlobalStyle } from './styles/GlobalStyle.ts';
+import { worker } from './mocks/worker';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/index.tsx';
-import { worker } from './mocks/worker';
-import ImageUrlProvider from './contexts/DiaryContext.tsx';
+import { GlobalStyle } from './styles/GlobalStyle.ts';
 
 if (import.meta.env.MODE === 'development') {
   worker.start();
@@ -13,8 +12,6 @@ if (import.meta.env.MODE === 'development') {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <GlobalStyle />
-    <ImageUrlProvider>
-      <RouterProvider router={router} />
-    </ImageUrlProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

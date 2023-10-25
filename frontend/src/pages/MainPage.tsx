@@ -61,32 +61,15 @@ const MainPage = () => {
     };
 
     await axios
-      .post(`${BASE_URL}/posts/contents`, JSON.stringify(data), {
-        headers: {
-          'Content-Type': `application/json`,
-        },
-      })
-      .then(async (res) => {
-        postSaveImage(res.data.Location);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const postSaveImage = async (imageUrlFromDalle: string) => {
-    const data = {
-      image_url: imageUrlFromDalle,
-    };
-
-    await axios
       .post(`${BASE_URL}/posts/save`, JSON.stringify(data), {
         headers: {
           'Content-Type': `application/json`,
         },
       })
-      .then((res) => {
+      .then(async (res) => {
         setDiaryContent((prev) => ({
           ...prev,
-          imageUrl: res.data.image_name,
+          imageUrl: res.data.image_name.replace('static/', ''),
         }));
         setIsLoading(false);
 
@@ -110,9 +93,6 @@ const MainPage = () => {
       return alert('일기 내용을 작성해주세요 🥺');
     }
 
-    const char = diaryContents.split('');
-
-    setDiaryContent((prev) => ({ ...prev, diaryCharacters: char }));
     postData();
     alert('그림을 생성하겠습니다.');
   };

@@ -1,0 +1,7 @@
+{
+  "date": "2023-10-25",
+  "title": "오늘의 일기",
+  "weather": "cloudy",
+  "contents": "내용은 100자 이내",
+  "img_name": "static/mockImage.jpeg"
+}
