@@ -41,7 +41,7 @@ const ResultPage = () => {
   return (
     <Layout>
       <S.DateWeatherContainer>
-        <Date />
+        <Date responseDate={data?.date} />
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>

@@ -1,6 +1,14 @@
-export const today = new Date();
-export const getYear = today.getFullYear();
-export const getMonth = today.getMonth() + 1;
-export const getDate = today.getDate();
-export const getDay = today.getDay();
-export const day = ['일', '월', '화', '수', '목', '금', '토'];
+export const parsedDate = (date: string | undefined) => {
+  const computeDateDetails = (date: Date) => {
+    const getYear = date.getFullYear();
+    const getMonth = date.getMonth() + 1;
+    const getDate = date.getDate();
+    const getDay = date.getDay();
+    const day = ['일', '월', '화', '수', '목', '금', '토'];
+
+    return { getYear, getMonth, getDate, getDay, day };
+  };
+
+  const today = date ? new Date(date) : new Date();
+  return computeDateDetails(today);
+};

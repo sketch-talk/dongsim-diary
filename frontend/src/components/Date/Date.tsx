@@ -1,15 +1,24 @@
 import styled from 'styled-components';
-import { day, getDate, getDay, getMonth, getYear } from '../../utils/date';
 import React from 'react';
+import { parsedDate } from '../../utils/date';
+interface Props {
+  responseDate?: string;
+}
 
-const Date = React.memo(() => {
+const Date = React.memo(({ responseDate }: Props) => {
+  const date = parsedDate(responseDate);
+
   return (
     <S.DateWrapper>
       <S.Date>
-        <S.HighlightedText>{getYear}</S.HighlightedText>년
-        <S.HighlightedText>{getMonth}</S.HighlightedText>월
-        <S.HighlightedText>{getDate}</S.HighlightedText>일
-        <S.HighlightedText>{day[getDay]}</S.HighlightedText>요일
+        <S.HighlightedText>{date.getYear}</S.HighlightedText>
+        <span>년</span>
+        <S.HighlightedText>{date.getMonth}</S.HighlightedText>
+        <span>월</span>
+        <S.HighlightedText>{date.getDate}</S.HighlightedText>
+        <span>일</span>
+        <S.HighlightedText>{date.day[date.getDay]}</S.HighlightedText>
+        <span>요일</span>
       </S.Date>
     </S.DateWrapper>
   );
