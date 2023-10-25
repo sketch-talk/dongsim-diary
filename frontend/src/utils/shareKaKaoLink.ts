@@ -18,6 +18,11 @@ export const shareKakao = (imageName: string, title: string) => {
           webUrl: `${BASE_URL}/result/${imageName}`,
         },
       },
+      itemContent: {
+        profileText: '동심일기',
+        profileImageUrl:
+          'http://k.kakaocdn.net/dn/bwROYr/btszdnfvVrH/Pktuui4quZfGguONAtIKWk/kakaolink40_original.png',
+      },
       buttons: [
         {
           title: '일기 확인하기',
