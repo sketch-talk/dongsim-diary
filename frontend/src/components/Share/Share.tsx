@@ -31,11 +31,25 @@ const Share = () => {
   };
 
   const handleCopyClipBoard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert('클립보드에 링크가 복사되었어요.');
-    } catch (err) {
-      console.log(err);
+    if (navigator.clipboard !== undefined) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('클립보드에 링크가 복사되었습니다.');
+      });
+    } else {
+      // execCommand 사용
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      textArea.setSelectionRange(0, 99999);
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.error('복사 실패', err);
+      }
+      textArea.setSelectionRange(0, 0);
+      document.body.removeChild(textArea);
+      alert('클립보드에 링크가 복사되었습니다.');
     }
   };
 
