@@ -9,15 +9,11 @@ import defaultImage from '../../public/default_image.png';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { GetDiaryResponse } from '../types/post';
+import Loading from '../components/Loading/Loading';
 
 const ResultPage = () => {
-  const [diaryContent, setDiaryContent] = useState<GetDiaryResponse>({
-    date: '',
-    title: '',
-    contents: '',
-    weather: '',
-    img_name: '',
-  });
+  const [data, setData] = useState<GetDiaryResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
 
@@ -26,16 +22,13 @@ const ResultPage = () => {
       await axios
         .get<GetDiaryResponse>(`${BASE_URL}/posts/result/${params.postId}`)
         .then(async (res) => {
-          setDiaryContent((prev) => ({
-            ...prev,
-            date: res.data.date,
-            title: res.data.title,
-            weather: res.data.weather,
-            contents: res.data.contents,
-            img_name: res.data.img_name,
-          }));
+          setData(res.data);
+          setIsLoading(false);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          setIsLoading(false);
+          console.error(error);
+        });
     };
 
     getPost();
@@ -52,28 +45,35 @@ const ResultPage = () => {
         <S.WeatherWrapper>
           <S.Weather>
             <S.WeatherTitle>날씨: </S.WeatherTitle>
-            <Weathers weather={diaryContent.weather} />
+            <Weathers weather={data?.weather} />
           </S.Weather>
         </S.WeatherWrapper>
       </S.DateWeatherContainer>
       <S.DrawingWrapper>
-        <img
-          width="256px"
-          height="256px"
-          alt="그림"
-          src={`${BASE_URL}/${diaryContent.img_name}`}
-          crossOrigin="anonymous"
-          onError={onErrorImg}
-        />
+        {isLoading ? (
+          <Loading>
+            <p>이미지를 생성 중입니다.</p>
+            <p> 잠시만 기다려주세요.</p>
+          </Loading>
+        ) : (
+          <img
+            width="256px"
+            height="256px"
+            alt="그림"
+            src={`${BASE_URL}/${data?.img_name}`}
+            crossOrigin="anonymous"
+            onError={onErrorImg}
+          />
+        )}
       </S.DrawingWrapper>
       <S.DiaryContentContainer>
         <>
           <S.diaryTitleContainer>
             <S.diaryTitle>제목</S.diaryTitle>
-            <S.diaryTitleWritten>{diaryContent.title}</S.diaryTitleWritten>
+            <S.diaryTitleWritten>{data?.title}</S.diaryTitleWritten>
           </S.diaryTitleContainer>
           <S.CharacterInputContainer>
-            {diaryContent.contents.split('').map((item, index) => {
+            {data?.contents.split('').map((item, index) => {
               return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
             })}
           </S.CharacterInputContainer>
