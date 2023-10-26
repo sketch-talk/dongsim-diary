@@ -79,7 +79,7 @@ const ResultPage = () => {
           </S.CharacterInputContainer>
         </>
       </S.DiaryContentContainer>
-      <Share />
+      {data ? <Share title={data?.title} img_name={data?.img_name} /> : null}
     </Layout>
   );
 };

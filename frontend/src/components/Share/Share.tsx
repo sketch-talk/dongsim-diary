@@ -2,14 +2,17 @@ import { ReactComponent as KakaoTalk } from '../../assets/kakao_icon.svg';
 import { ReactComponent as Link } from '../../assets/link_icon.svg';
 import { styled } from 'styled-components';
 import { createPortal } from 'react-dom';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { shareKakao } from '../../utils/shareKaKaoLink';
-import { DiaryContext } from '../../contexts/DiaryContext';
 import { useLocation } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
 
-const Share = () => {
-  const { diaryTitle, imageUrl } = useContext(DiaryContext);
+interface Props {
+  img_name: string;
+  title: string;
+}
+
+const Share = ({ img_name, title }: Props) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -53,14 +56,14 @@ const Share = () => {
       alert('클립보드에 링크가 복사되었습니다.');
     }
   };
-
+  console.log(img_name);
   return createPortal(
     <S.ShareContainer>
       <S.ShareIconContainer>
         <S.ShareIcon>
           <p>내 동심일기 공유하기</p>
           <KakaoTalk
-            onClick={() => handleShareButton(`${imageUrl}`, diaryTitle)}
+            onClick={() => handleShareButton(`${img_name}`, title)}
             width="33px"
             height="33px"
           />
