@@ -29,14 +29,15 @@ IMAGE_STORAGE_PATH = "/home/ubuntu/img/"
 
 openai.api_key = OPENAI_API_KEY
 
+
+app = FastAPI()
+
 with open("db.json") as secret_file:
     secret_data = json.load(secret_file)
     db_user = secret_data["db_user"]
     db_password = secret_data["db_password"]
     db_host = secret_data["db_host"]
     db_name = secret_data["db_name"]
-
-app = FastAPI()
 
 # MySQL 연결 문자열 생성
 SQLALCHEMY_DATABASE_URL = f"mysql://{db_user}:{db_password}@{db_host}/{db_name}"
@@ -130,7 +131,7 @@ async def get_answer(data: QuestionInput):
 @app.get("/posts/result/{filename}")
 async def get_result(filename: str):
     # 데이터베이스에서 filename과 일치하는 행 조회
-    img_name=filename+".png"
+    img_name=filename+".jpg"
     db = SessionLocal()
     data_entry = db.query(Data).filter_by(img_location=img_name).first()
     db.close()
