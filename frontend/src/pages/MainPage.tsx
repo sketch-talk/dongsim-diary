@@ -75,7 +75,7 @@ const MainPage = () => {
 
         const routerImageName = res.data.image_name.replace('static/', '');
 
-        goToResultPage(routerImageName.replace('.png', ''));
+        goToResultPage(routerImageName.replace('.jpg', ''));
       })
       .catch((error) => console.error(error));
   };
@@ -141,12 +141,12 @@ const MainPage = () => {
         />
       </S.DiaryContentContainer>
       <S.ProfileContainer>
-        <p>만든놈:</p>
+        <p>©2023</p>
         <S.Profile href="https://github.com/gyeongza" target="_blank">
-          박경현,
+          gyeongza |
         </S.Profile>
         <S.Profile href="https://github.com/ss3un9" target="_blank">
-          박승현
+          ss3un9
         </S.Profile>
       </S.ProfileContainer>
     </Layout>
@@ -275,8 +275,9 @@ const S = {
     display: flex;
     gap: 5px;
     justify-content: center;
-    font-family: var(--font-manse);
     margin: 40px 0 20px 0;
+    font-family: var(--font-pretendard) !important;
+    font-size: 12px;
   `,
 
   Profile: styled.a`

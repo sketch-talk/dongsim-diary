@@ -12,7 +12,7 @@ export const shareKakao = (imageName: string, title: string) => {
       content: {
         title: title, // 인자값으로 받은 title
         description: '오늘 일기를 그림으로 공유해보세요!', // 인자값으로 받은 title
-        imageUrl: `${BASE_URL}/static/${imageName}.png`,
+        imageUrl: `${BASE_URL}/static/${imageName}.jpg`,
         link: {
           mobileWebUrl: `${BASE_URL}/result/${imageName}`, // 인자값으로 받은 route(uri 형태)
           webUrl: `${BASE_URL}/result/${imageName}`,
