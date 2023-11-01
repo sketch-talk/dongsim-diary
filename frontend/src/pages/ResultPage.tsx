@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { GetDiaryResponse } from '../types/post';
 import Loading from '../components/Loading/Loading';
+import stampImage from '../assets/good_stamp.png';
 
 const ResultPage = () => {
   const [data, setData] = useState<GetDiaryResponse | null>(null);
@@ -67,17 +68,20 @@ const ResultPage = () => {
         )}
       </S.DrawingWrapper>
       <S.DiaryContentContainer>
-        <>
-          <S.diaryTitleContainer>
-            <S.diaryTitle>제목</S.diaryTitle>
-            <S.diaryTitleWritten>{data?.title}</S.diaryTitleWritten>
-          </S.diaryTitleContainer>
-          <S.CharacterInputContainer>
-            {data?.contents.split('').map((item, index) => {
-              return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
-            })}
-          </S.CharacterInputContainer>
-        </>
+        {data ? (
+          <>
+            <S.diaryTitleContainer>
+              <S.diaryTitle>제목</S.diaryTitle>
+              <S.diaryTitleWritten>{data?.title}</S.diaryTitleWritten>
+              <S.Stamp src={stampImage} alt="참잘했어요_도장" />
+            </S.diaryTitleContainer>
+            <S.CharacterInputContainer>
+              {data?.contents.split('').map((item, index) => {
+                return <S.CharacterInput key={index}>{item}</S.CharacterInput>;
+              })}
+            </S.CharacterInputContainer>
+          </>
+        ) : null}
       </S.DiaryContentContainer>
       {data ? <Share title={data?.title} img_name={data?.img_name} /> : null}
     </Layout>
@@ -87,6 +91,15 @@ const ResultPage = () => {
 export default ResultPage;
 
 const S = {
+  Stamp: styled.img`
+    width: 100px;
+    height: 97px;
+
+    position: absolute;
+    right: 0;
+    transform: rotate(25deg);
+  `,
+
   DateWeatherContainer: styled.div`
     display: flex;
     flex-direction: column;
@@ -168,6 +181,7 @@ const S = {
 
     border: 1px solid var(--base-color);
     border-top: none;
+    position: relative;
   `,
 
   diaryTitle: styled.p`

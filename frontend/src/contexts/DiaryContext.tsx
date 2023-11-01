@@ -24,7 +24,7 @@ export const DiaryContext =
 const DiaryProvider: React.FC<Props> = ({ children }) => {
   const [diaryContent, setDiaryContent] = useState<Diary>({
     diaryTitle: '',
-    weather: '',
+    weather: 'sunny',
     diaryContents: '',
     diaryCharacters: [],
     imageUrl: '',

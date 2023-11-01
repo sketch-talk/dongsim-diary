@@ -29,7 +29,7 @@ const Share = ({ img_name, title }: Props) => {
 
   const handleShareButton = (imageUrl: string, title: string) => {
     const imageName = imageUrl.replace('static/', '');
-    const parsedImageName = imageName.replace('.png', '');
+    const parsedImageName = imageName.replace('.jpg', '');
 
     shareKakao(parsedImageName, title);
   };
@@ -77,6 +77,15 @@ const Share = ({ img_name, title }: Props) => {
         </S.ShareIcon>
         <S.ReWriteButton href="/">다시 쓰기</S.ReWriteButton>
       </S.ShareIconContainer>
+      <S.ProfileContainer>
+        <p>©2023</p>
+        <S.Profile href="https://github.com/gyeongza" target="_blank">
+          gyeongza |
+        </S.Profile>
+        <S.Profile href="https://github.com/ss3un9" target="_blank">
+          ss3un9
+        </S.Profile>
+      </S.ProfileContainer>
     </S.ShareContainer>,
     document.getElementById('share-root') as HTMLDivElement
   );
@@ -132,5 +141,18 @@ const S = {
 
     background-color: #ffffff;
     color: #333333;
+  `,
+
+  ProfileContainer: styled.div`
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin: 40px 0 20px 0;
+    font-family: var(--font-pretendard) !important;
+    font-size: 12px;
+  `,
+
+  Profile: styled.a`
+    cursor: pointer;
   `,
 };
