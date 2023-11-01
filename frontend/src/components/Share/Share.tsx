@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { shareKakao } from '../../utils/shareKaKaoLink';
 import { useLocation } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
+import KakaoAdFit from '../../KakaoAdfit';
 
 interface Props {
   img_name: string;
@@ -58,35 +59,43 @@ const Share = ({ img_name, title }: Props) => {
   };
   console.log(img_name);
   return createPortal(
-    <S.ShareContainer>
-      <S.ShareIconContainer>
-        <S.ShareIcon>
-          <p>내 동심일기 공유하기</p>
-          <KakaoTalk
-            onClick={() => handleShareButton(`${img_name}`, title)}
-            width="33px"
-            height="33px"
-          />
-          <Link
-            onClick={() =>
-              handleCopyClipBoard(`${BASE_URL}${location.pathname}`)
-            }
-            width="33px"
-            height="33px"
-          />
-        </S.ShareIcon>
-        <S.ReWriteButton href="/">다시 쓰기</S.ReWriteButton>
-      </S.ShareIconContainer>
-      <S.ProfileContainer>
-        <p>©2023</p>
-        <S.Profile href="https://github.com/gyeongza" target="_blank">
-          gyeongza |
-        </S.Profile>
-        <S.Profile href="https://github.com/ss3un9" target="_blank">
-          ss3un9
-        </S.Profile>
-      </S.ProfileContainer>
-    </S.ShareContainer>,
+    <>
+      <S.ShareContainer>
+        <S.ShareIconContainer>
+          <S.ShareIcon>
+            <p>내 동심일기 공유하기</p>
+            <KakaoTalk
+              onClick={() => handleShareButton(`${img_name}`, title)}
+              width="33px"
+              height="33px"
+            />
+            <Link
+              onClick={() =>
+                handleCopyClipBoard(`${BASE_URL}${location.pathname}`)
+              }
+              width="33px"
+              height="33px"
+            />
+          </S.ShareIcon>
+          <S.ReWriteButton href="/">다시 쓰기</S.ReWriteButton>
+        </S.ShareIconContainer>
+        <S.ProfileContainer>
+          <p>©2023</p>
+          <S.Profile href="https://github.com/gyeongza" target="_blank">
+            gyeongza |
+          </S.Profile>
+          <S.Profile href="https://github.com/ss3un9" target="_blank">
+            ss3un9
+          </S.Profile>
+        </S.ProfileContainer>
+        <KakaoAdFit
+          unit="DAN-leXk8TAFiz8032BR"
+          disabled={false}
+          width="320px"
+          height="50px"
+        />
+      </S.ShareContainer>
+    </>,
     document.getElementById('share-root') as HTMLDivElement
   );
 };
@@ -98,6 +107,7 @@ const S = {
     max-width: 600px;
     height: 100%;
     margin: 0 auto;
+    padding: 0px 20px 20px 20px;
   `,
 
   ShareIconContainer: styled.div`

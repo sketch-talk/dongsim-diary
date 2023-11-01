@@ -15,6 +15,7 @@ import { BASE_URL } from '../constants';
 import { usePageRouter } from '../hooks/usePageRouter';
 import { DiaryContext } from '../contexts/DiaryContext';
 import Date from '../components/Date/Date';
+import KakaoAdFit from '../KakaoAdfit';
 
 const MainPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -149,6 +150,12 @@ const MainPage = () => {
           ss3un9
         </S.Profile>
       </S.ProfileContainer>
+      <KakaoAdFit
+        unit="DAN-mS5TycRY336XzeZR"
+        disabled={false}
+        width="320px"
+        height="50px"
+      />
     </Layout>
   );
 };
