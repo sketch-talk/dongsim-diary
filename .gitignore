@@ -1,0 +1,6 @@
+
+# ignore all files in any directory named temp
+api_key/
+testver/
+test_images/
+__pycache__/
