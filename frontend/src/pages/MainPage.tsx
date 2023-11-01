@@ -190,7 +190,7 @@ const S = {
     justify-content: center;
     align-items: center;
 
-    height: 256px;
+    height: 200px;
 
     color: var(--gray-500);
 

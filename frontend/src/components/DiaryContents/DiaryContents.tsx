@@ -143,7 +143,6 @@ const S = {
   `,
 
   WritingArea: styled.textarea`
-    min-height: 200px;
     padding: 20px;
 
     line-height: 1.5em;
