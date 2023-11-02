@@ -100,11 +100,6 @@ const MainPage = () => {
     alert('그림을 생성하겠습니다.');
   };
 
-  // const handleShare = () => {
-  //   console.log(imageUrl);
-  //   alert('준비 중인 기능입니다.');
-  // };
-
   return (
     <Layout>
       <S.DateWeatherContainer>
@@ -123,8 +118,8 @@ const MainPage = () => {
       <S.DrawingWrapper>
         {isLoading ? (
           <Loading>
-            <p>이미지를 생성 중입니다.</p>
-            <p> 잠시만 기다려주세요.</p>
+            <p>🎨 열심히 그리고 있어요.</p>
+            <p>약 5 ~ 10초정도 소요됩니다.</p>
           </Loading>
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
