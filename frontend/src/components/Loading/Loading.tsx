@@ -4,9 +4,14 @@ import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
+  isError: boolean;
 }
 
-const Loading = ({ children }: Props) => {
+const Loading = ({ children, isError }: Props) => {
+  if (isError) {
+    throw Error;
+  }
+
   return (
     <LoadingContainer>
       <img src={Spinner} alt="로딩중" />

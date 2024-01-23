@@ -6,7 +6,11 @@ export const handlers = [
   rest.post('*/posts/save', (_, res, ctx) => {
     const mockData = savedImageUrl;
 
-    return res(ctx.delay(1000), ctx.status(200), ctx.json(mockData));
+    if (Math.random() < 0.5) {
+      return res(ctx.status(200), ctx.json(mockData));
+    }
+
+    return res(ctx.status(500), ctx.json({ errorMessage: 'Not Found' }));
   }),
 
   rest.get(`*/posts/result/:image_name`, (_, res, ctx) => {

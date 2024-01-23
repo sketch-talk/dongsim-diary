@@ -16,9 +16,12 @@ import { usePageRouter } from '../hooks/usePageRouter';
 import { DiaryContext } from '../contexts/DiaryContext';
 import Date from '../components/Date/Date';
 import KakaoAdFit from '../KakaoAdfit';
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
 const MainPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+
   const { diaryTitle, weather, diaryContents, setDiaryContent } =
     useContext(DiaryContext);
 
@@ -78,7 +81,11 @@ const MainPage = () => {
 
         goToResultPage(routerImageName.replace('.jpg', ''));
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        if (error instanceof Error) {
+          setIsError(true);
+        }
+      });
   };
 
   const handleSubmitDiary = (e: FormEvent<HTMLButtonElement>) => {
@@ -117,10 +124,12 @@ const MainPage = () => {
 
       <S.DrawingWrapper>
         {isLoading ? (
-          <Loading>
-            <p>🎨 열심히 그리고 있어요.</p>
-            <p>약 5 ~ 10초정도 소요됩니다.</p>
-          </Loading>
+          <ErrorBoundary onRetry={postData}>
+            <Loading isError={isError}>
+              <p>🎨 열심히 그리고 있어요.</p>
+              <p>약 5 ~ 10초정도 소요됩니다.</p>
+            </Loading>
+          </ErrorBoundary>
         ) : (
           <p>🎨 일기를 작성하면 그림이 완성돼요.</p>
         )}
