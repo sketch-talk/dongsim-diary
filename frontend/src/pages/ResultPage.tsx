@@ -53,7 +53,7 @@ const ResultPage = () => {
       <S.DrawingWrapper>
         {isLoading ? (
           <Loading>
-            <p>이미지를 생성 중입니다.</p>
+            <p>이미지를 불러오는 중입니다.</p>
             <p> 잠시만 기다려주세요.</p>
           </Loading>
         ) : (

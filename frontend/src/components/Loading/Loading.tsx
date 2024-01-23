@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
-  isError: boolean;
+  isError?: boolean;
 }
 
 const Loading = ({ children, isError }: Props) => {
